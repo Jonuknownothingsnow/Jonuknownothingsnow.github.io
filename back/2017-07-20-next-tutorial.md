@@ -15,7 +15,7 @@ tags:
 ## Screenshots
 
 * Desktop
-![Desktop Preview](http://iissnan.com/nexus/next/desktop-preview.png)
+  ![Desktop Preview](http://iissnan.com/nexus/next/desktop-preview.png)
 
 * Sidebar
 
