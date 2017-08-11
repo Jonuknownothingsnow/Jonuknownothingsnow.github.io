@@ -1,7 +1,8 @@
 ---
-title:Hello Pandas
-describe:平时工作一直在用pandas，感觉也该写一下相关的心得，来对这么好用的一个工具表示感谢（笑）
-categories:- 工具经验
+title: Hello Pandas
+description: 平时工作一直在用pandas，感觉也该写一下相关的心得，来对这么好用的一个工具表示感谢（笑）
+categories: 
+- 工具经验
 date: 2017-08-12
 ---
 
