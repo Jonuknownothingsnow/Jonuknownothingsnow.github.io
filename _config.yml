@@ -380,7 +380,7 @@ han: false
 # Disqus
 disqus:
   enable: true
-  shortname: 摸奶狂少
+  shortname: xx
   count: true
 
 # Hypercomments
