@@ -65,27 +65,50 @@ df.query("a==1")
 
 ### 数据处理
 
+在dataframe中最简单的数据处理可以这样来进行：
+
+```python
+#对a列每个元素加1
+df["a"] = df["a"]+1
+df["x"] = df["a"]*df["b"]
+```
+
+
+
+最常用的排序语法是这样子的，注意dataframe默认使用的是快速排序法，这并不是一个stable的算法。可以通过设置kind="mergesort"来得到stable的排序，但这样操作的话仅支持对单列进行排序
+
+```python
+#这是我们常用的排序
+df.sort_values("a",ascending=False)#按a列降序排序
+#与其他操作不同的是，df.sort_values有个inplace参数，可以直接在原始数据上操作
+df.sort_values(["a","b"],inplace=True)
+```
+
+
+
 dataframe里最常用最通用的是.apply()方法
 
 ```python
 #对a列逐个加1
-da["a"].apply(lambda x:x+1)
+df["a"].apply(lambda x:x+1)
 
 #如果处理太复杂，可以定义一个方法
 def foo(x):
   x += 1
   return x
 
-da["a"].apply(foo)
+df["a"].apply(foo)
 
 #注意，dataframe处理后只是返回一个结果，不会直接作用在原始数据上，如果需要修改原始数据，需要再进行赋值
-da["a"] = da["a"].apply(lambda x:x+1)
+df["a"] = df["a"].apply(lambda x:x+1)
 
 #直接在视图上赋值会被pandas警告，有的时候是无法这样赋值，建议赋值操作的时候使用loc方法
-da.loc[:,"a"] = da["a"].apply(lambda x:x+1)
+df.loc[:,"a"] = df["a"].apply(lambda x:x+1)
 
 #对dataframe直接进行apply会按列传入到方法，如果需要逐行操作需要设置axis=1
 ```
+
+
 
 apply是最自由的方法，使用起来非常爽快，除此之外dataframe还有许多快捷的方法，注意一下和apply一样，dataframe所有的操作都是返回一个结果，而非直接在原始数据上修改。
 
@@ -116,7 +139,81 @@ df.fillna(method="ffill")#等效于上一行
 df.fillna(value="mean")#以均值进行填
 ```
 
-大部分的dataframe操作都通过axis参数来指定在列或者行上进行操作，大家自己试试看吧。
+
+
+一般来说apply和以上这些方法可以满足大部分的数据操作需求，理论上来说循环能做的事情apply也能做，但是实际操作当中可能还是存在一些需要迭代才能完成的需求，dataframe的迭代与想象中其实不太一样
+
+```python
+#想象中这样会逐行打印
+for x in df:
+  print(x)
+#理想很丰满，现实很骨感，这样做其实等效于：
+for x in df.columns:
+  print(x)
+
+#要想打印出每一列的值，需要
+for x in df.iterrows():
+  print(x[1])
+
+#可能有同学会问，为什么不直接print(x)呢，因为x其实是个列表，x[0]是该行的index，x[1]才是这以行的值(一个Series)
+
+#当然打印这个操作其实也可以由apply完成的，尽量还是多使用apply吧
+df.apply(lambda row:print(row),axis=1)
+```
+
+
+
+此外大部分的dataframe操作都通过axis参数来指定在列或者行上进行操作，大家自己试试看吧。
+
+
+
+### 数据分析
+
+dataframe可以进行快速多样的数据分析，首先是基础的数据特征：
+
+```python
+#平均值
+df.mean()
+df["a"].mean()
+
+#标准差
+df.std()
+
+#计数
+df.count()
+
+#最大值最小值
+df.max()
+df.min()
+
+#相关系数矩阵！！
+df.corr()
+df.cov()#协方差矩阵
+
+#一键数据描述大礼包！！
+df.describe()#包括最大值最小值平均值标准差四分位数，让你一次看到饱玩到爽！
+
+```
+
+更进一步的分析往往要使用到数据聚合，举例来说我们手上有一份数据，每一行其实是代表了一个订单的信息，但是我们想看的其实是每个用户的信息，这时候就要对数据进行聚合
+
+```python
+#假设用户的唯一主代码是user_id，订单金额是amount
+group = df.groupby("uesr_id")
+#计算每个用户的总消费金额
+user = group["amount"].sum()#会返回一个以user_id为index，名称为amount的Series
+user = group[["amount"]].sum()#会返回一个以user_id为index，只有一列amount列的DataFrame
+
+#对新的DataFrame追加新的列
+user["count"] = group["order_id"].count()
+
+#group对象也可以迭代
+for x in group:
+  print(x[0])#返回每个用户的user_id
+  print(x[1])#每个用户全部订单的DataFrame，即df[df["user_id"]==x[0]]
+```
+
+可以做到类似的分析的还有层次索引，数据透视等方法，不过我觉得还是使用聚合操作来的直接一些。
 
 
 
