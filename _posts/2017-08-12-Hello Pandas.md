@@ -1,12 +1,14 @@
 ---
 title: Hello Pandas
-description: 平时工作一直在用pandas，感觉也该写一下相关的心得，来对这么好用的一个工具表示感谢（笑）
+excerpt_separator: <!--more-->
 categories: 
 - 工具经验
 date: 2017-08-12
 ---
 
 平时工作一直在用pandas，感觉也该写一下相关的心得，来对这么好用的一个工具表示感谢（笑）。本文只是随手记下的一些知识点，如果要系统的学习的话还是~~不厌其烦地~~向大家推荐《利用python进行数据分析》
+
+<!--more-->
 
 ## dataframe
 
