@@ -35,7 +35,7 @@ paginate: 10
 exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md", "Gemfile", "Gemfile.lock", "README_en.md"]
 
 # Separator
-#excerpt_separator: <!-- more -->
+excerpt_separator: <!-- more -->
 
 # Code Highlighter
 ## 'pygments' is unsupported on GitHub Pages now.
@@ -230,7 +230,7 @@ social_icons:
   Weibo: weibo
 
 
-Sidebar Avatar
+# Sidebar Avatar
 in directory: /assets/images/好吃.jpg
 #avatar:
 
