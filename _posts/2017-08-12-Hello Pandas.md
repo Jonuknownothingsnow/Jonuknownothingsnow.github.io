@@ -1,6 +1,6 @@
 ---
 title: Hello Pandas
-excerpt_separator: <!--more-->
+excerpt_separator: <!-- more -->
 categories: 
 - 工具经验
 date: 2017-08-12
@@ -8,13 +8,13 @@ date: 2017-08-12
 
 平时工作一直在用pandas，感觉也该写一下相关的心得，来对这么好用的一个工具表示感谢（笑）。本文只是随手记下的一些知识点，如果要系统的学习的话还是~~不厌其烦地~~向大家推荐《利用python进行数据分析》
 
-<!--more-->
+
 
 ## dataframe
 
 虽然说Series更加基础，但其实我们日常使用最多的还是dataframe。说简单点的话dataframe其实就是python版的excel，用来操作数据，有的同学可能喜欢使用sql语句对数据进行切片、聚合之类的处理，但是就我个人而言，dataframe操作起来要比sql人性化多了。
 
-
+<!-- more -->
 
 ### 切片
 
