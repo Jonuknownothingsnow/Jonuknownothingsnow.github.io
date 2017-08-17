@@ -1,32 +1,26 @@
+# Dependencies
+markdown:         redcarpet
+highlighter:      pygments
+
 # Permalinks
-permalink:           pretty
+permalink:        pretty
+relative_permalinks: true
 
 # Setup
-title:               摸奶狂少
-tagline:             狂拽龙少酷屌帅
-url:                 
-paginate:            2
-baseurl:             ""
+title:            火力支援
+tagline:          '看起来你需要一些火力支援'
+description:      'A brazen two-column <a href="http://jekyllrb.com" target="_blank">Jekyll</a> theme that pairs a prominent sidebar with uncomplicated content. Made by <a href="https://twitter.com/mdo" target="_blank">@mdo</a>.'
+url:              http://hyde.getpoole.com
+baseurl:          /
 
-# Assets
-#
-# We specify the directory for Jekyll so we can use @imports.
-sass:
-  sass_dir:          _sass
-  style:            :compressed
-
-# About/contact
 author:
-  name:              狂拽龙少酷屌帅
-  url:               
-  email:             
+  name:           '王大炮'
+  url:            
+
+paginate:         5
 
 # Custom vars
-version:             2.0.0
-github:
-  repo:              
+version:          2.1.0
 
-# Gems
-gems:
-  - jekyll-paginate
-  - jekyll-gist
+github:
+  repo:          
