@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>谐门算法：卷积神经网络原理 | 火力支援</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="谐门算法：卷积神经网络来聊聊深度学习的东西吧。卷积神经网络(cnn)是目前应用最成熟，也算是最入门的一种神经网络类型，比如MNIST这道常用来做框架教程的题，就是用卷积神经网络来解的。一般来说大部分的图像识别、分类问题，也是靠卷积网络或者它的变体来解决的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="谐门算法：卷积神经网络原理">
+<meta property="og:url" content="https://jonuknownothingsnow.github.io/2018/06/03/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/index.html">
+<meta property="og:site_name" content="火力支援">
+<meta property="og:description" content="谐门算法：卷积神经网络来聊聊深度学习的东西吧。卷积神经网络(cnn)是目前应用最成熟，也算是最入门的一种神经网络类型，比如MNIST这道常用来做框架教程的题，就是用卷积神经网络来解的。一般来说大部分的图像识别、分类问题，也是靠卷积网络或者它的变体来解决的。">
+<meta property="og:locale">
+<meta property="og:image" content="https://wx4.sinaimg.cn/mw690/67111f6aly1fhykes5sffg207g05gdgf.gif">
+<meta property="og:image" content="https://wx2.sinaimg.cn/mw690/0065SY2ely1fhyic5goncj30rg0ne436.jpg">
+<meta property="og:image" content="https://i.loli.net/2018/06/05/5b164ed771f14.jpeg">
+<meta property="article:published_time" content="2018-06-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-08-18T06:31:54.696Z">
+<meta property="article:author" content="王大炮">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="算法原理">
+<meta property="article:tag" content="卷积神经网络">
+<meta property="article:tag" content="谐门武学">
+<meta property="article:tag" content="cnn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx4.sinaimg.cn/mw690/67111f6aly1fhykes5sffg207g05gdgf.gif">
+  
+    <link rel="alternate" href="/atom.xml" title="火力支援" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.0.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">火力支援</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://jonuknownothingsnow.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-卷积神经网络" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/03/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="article-date">
+  <time datetime="2018-06-02T16:00:00.000Z" itemprop="datePublished">2018-06-03</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95-%E6%A8%A1%E5%9E%8B/">算法/模型</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      谐门算法：卷积神经网络原理
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="谐门算法：卷积神经网络"><a href="#谐门算法：卷积神经网络" class="headerlink" title="谐门算法：卷积神经网络"></a>谐门算法：卷积神经网络</h1><p>来聊聊深度学习的东西吧。卷积神经网络(cnn)是目前应用最成熟，也算是最入门的一种神经网络类型，比如MNIST这道常用来做框架教程的题，就是用卷积神经网络来解的。一般来说大部分的图像识别、分类问题，也是靠卷积网络或者它的变体来解决的。</p>
+<a id="more"></a>
+
+<h2 id="神经网络基础"><a href="#神经网络基础" class="headerlink" title="神经网络基础"></a>神经网络基础</h2><p>(对神经网络有了解的同学可跳过这一章)</p>
+<p>我们先来感受一下普通的神经网络，设想一下我们要做一个二分类，一共有三个可用的特征， 那我们可以用这三个特征做一个逻辑斯蒂回归。其实这就是一个神经网络（并不是），可以看成是只有一层，一个节点的神经网络。</p>
+<p>那如果我们用三个特征训练三个不同的逻辑斯蒂回归，再把三个回归的结果结合起来呢？</p>
+<p>这就是单层的3个节点的神经网络。</p>
+<p>假设我们这三个回归输出了三个不同的值，y1、y2、y3,我们把这三个值作为新的特征，又训练了五个不同的逻辑斯蒂回归，那么我们就有一个有五个节点的第二层网络。</p>
+<p>这样一层层叠起来就是我们常说的神经网络了（大致如此）</p>
+<h3 id="优化器（optimizer）"><a href="#优化器（optimizer）" class="headerlink" title="优化器（optimizer）"></a>优化器（optimizer）</h3><p>如同训练普通的逻辑斯蒂回归，我们需要一个优化算法，来告诉我们在训练中如何一步步修改参数的值，最终得到目标函数。我们先以单层的情况来考察神经网络中最基础的优化器。</p>
+<h4 id="Gradient-Descent"><a href="#Gradient-Descent" class="headerlink" title="Gradient Descent"></a>Gradient Descent</h4><p>Gradient Descent也即梯度下降（GD）。可以这样来理解梯度下降，假设我们要优化的两个参数是x、y，而我们的优化目标通称损失函数（loss）为z，我们的目标就是尽可能的减小z。那么我们建立一个三维坐标系，x-y为地面，z是高轴，我们实际上做的事情是在这个空间的一个曲面上寻找最低点。</p>
+<p>假设我们打开天眼，可以看到这个曲面的全貌，就是所有不同x、y取值下对应的z值，那么我们可以很简单的指出一个最低点。</p>
+<p>但是我们没有天眼，所以我们只能用笨一点的方法：</p>
+<p>随机取一个点1（x1,y1),对这个点求导，找到在这个点上，z值下降最快的方向（k1,k2),沿这个方向走长度为b的一步，到达（x1+k1*b,x2+k2*b）,这个点作为新的点2，重复上述过程，直到z值不再下降（下降幅度小于阈值）或达到指定步数。</p>
+<p>在上述过程中即是梯度下降，步长b即梯度下降中最重要的参数学习率（learning rate）</p>
+<h4 id="SGD-Stochastic-Gradient-Descent"><a href="#SGD-Stochastic-Gradient-Descent" class="headerlink" title="SGD(Stochastic Gradient Descent)"></a>SGD(Stochastic Gradient Descent)</h4><p>随机梯度下降法，是基于GD改进出来的一种方法，也是神经网络训练中最基础的优化方法。它的诞生源于GD的一个问题:</p>
+<p>设想一下，要计算参数x、y对于损失函数z的导数，要用到所有的样本，计算所有样本之后才能算出来，如果数据量小的话倒是没什么，但是万一数据量很大呢？那一次岂不是要算吐血？</p>
+<p>而神经网络面对的数据量就是相当大的，我们得找到一个更快、占用内存更小的方法。</p>
+<p>这时候我们想到一个解决办法：假设总共有一万个样本，我每次从中随机取出32个，作为一个batch，在这个batch上算导数，理论上来说，在每个batch上算出来的下降方向，应该大致是和总体样本上的吻合的，或者说期望应该是一致的，尽管会有波动。</p>
+<p>这个想法虽然乍一看很蠢，有点想当然，但是实际应用证明这个想法是正确的，而且相比GD使用全部样本，SGD的随机性反而使训练效果更好了（我感觉有点类似于随机深林随机抽取部分特征进行训练再组合，效果反而比使用全部特征要好一样）。</p>
+<p>说到这里同学们可能会提出很多想法，比如如果learning rate不是固定的，而是随着训练变化，越来越小之类的会不会更好？能不能设计一个算法自动在训练的过程中修改learning rate等等，是的，这是可以的，许多后来的算法都是在SGD的基础上做了类似的修改,ADAM、moment等等等等。我们这里就不一个个介绍了。</p>
+<h3 id="反向传播算法（Back-Propagation）"><a href="#反向传播算法（Back-Propagation）" class="headerlink" title="反向传播算法（Back Propagation）"></a>反向传播算法（Back Propagation）</h3><p>神经网络的另一个特点是反向传播算法。我们刚才说到的GD、SGD都有求导这个过程。对于单层来说，当然直接求导就好了，但是如果网络有很多层，那难道我们要把每个节点参数都对最终的loss求导吗？这样太麻烦了，好在导数是有这样一个数学性质的：<br>$$<br>\frac{\partial a}{\partial c} = \frac{\partial a}{\partial b} * \frac{\partial b}{\partial c}<br>$$<br>要求c对a的偏导数，可以通过b对a的偏导与c对b的偏导再相乘获得。</p>
+<p>应用到神经网络中，也就是说我们只需要求出最后一层对loss的导数，之前每一层只要求出自己相对下一层的导数就可以了，最后累乘就可以获得各层各节点对loss的偏导。</p>
+<p>（相信我，这会节省很多时间，可以自己推导下一个个算偏导和反向传播的计算量相差有多大）</p>
+<h3 id="激活函数"><a href="#激活函数" class="headerlink" title="激活函数"></a>激活函数</h3><p>原谅我讲完反向传播才来讲激活函数，按顺序的话激活函数实际上应该放在第一个讲。</p>
+<p>激活函数有点像我们在广义线性回归里提到的$g^-()$  举例来说一个逻辑斯蒂回归，可以看成一个线性单元后面接了个sigmoid激活函数。</p>
+<p>一开始神经网络里大家都是用sigmoid作为激活函数的，但是这样做有个问题，还记的我们刚才说的反向传播吗？随着loss的“影响”从后往前传，每经过一层就会穿过一个sigmoid，loss的“影响”会不断减小，就好像一块石头扔进水里，越远离波纹的中心，波动就越小一样。到了最开始的集成，基本上求得的导数都很小了，所以当网络层数很多时，几乎训练不到开始的几层，造成效果很差。</p>
+<p>这时候人们提出了Relu这种激活函数，也是我们现在最通用的激活函数，它是这样的：<br>$$<br>y = \left{ \begin{array}{ll}<br>0 &amp; \textrm{if $x=&lt;0$}\<br>x &amp; \textrm{if $x&gt;0$}\<br>\end{array} \right.<br>$$<br>如果小于0就输出0，如果大于零就原样输出，这样一来就不会梯度消失啦，棒棒。</p>
+<h3 id="DropOut"><a href="#DropOut" class="headerlink" title="DropOut"></a>DropOut</h3><p>在训练中我们常会使用DropOut这种技巧，就是在训练中，随机扔掉一层部分节点的结果。这种做法可以防止过拟合、同时也提升各个节点自身独立的性能。</p>
+<p>一个可能需要注意的点是，在DropOut之后需要rescale，讲起来虽然也不是很麻烦，但各个框架像是tensorflow这种的DropOut层都已经帮大家处理了这个问题，我想是暂时不需要过多的关注rescale，如果真的要手动处理rescale，也不必看这篇博客了_(:з」∠)_。</p>
+<p>（实际上就是dropout之后输出的合计值变小了，需要等比例放大到原来差不多的大小，假设dropout概率为0.25，那么就要乘（1/(1-0.25)),即1.33倍来回到原来的比例）</p>
+<h3 id="应对图像数据"><a href="#应对图像数据" class="headerlink" title="应对图像数据"></a>应对图像数据</h3><p>我们一直说的是普通的数据，那么怎么来处理图像数据呢？实际上两者是类似的。我们看到一张图像都是2d的，也就是宽X高这样的。每一副图像都由一个一个的像素点组成，比如600*400的一张图片，就是由240000个像素点组成的。</p>
+<p>如果图像是黑白的话，可以理解为单层的，600*400的一张图片，可以转化240000个数字，每个数字代表了一个像素上的灰度。</p>
+<p>如果图像是彩色的，可以理解成三层的（三个通道、channel），一张图片可以用600*400*3个数字来表示。</p>
+<p>也就是说，一张图片实际上是可以用一个特殊的矩阵来表达的，我们只要把这个矩阵作为输入特征，就可以解决图像相关的机器学习问题了。</p>
+<h2 id="卷积神经网络"><a href="#卷积神经网络" class="headerlink" title="卷积神经网络"></a>卷积神经网络</h2><p>卷积神经网络可以这样理解：</p>
+<p>我们要去识别一副图像，比如说要识别一张照片是不是狗的照片，理论上来说，狗是有它的外观特征的，那么我们期望有一组魔法的框框在整副图片上不断搜索，如果框框里出现了“狗狗特征”，那么这个框框就发亮，当图上有足够多的魔法框框发亮的时候，我们就认为这是一张狗的照片。</p>
+<p>这些童话中魔法的框框就是卷积。</p>
+<h3 id="卷积"><a href="#卷积" class="headerlink" title="卷积"></a>卷积</h3><p>其实卷积就是在图像上逐格移动的框框，每一个框到的范围里的矩阵，和另一个矩阵（称作卷积核或者滤波器）相乘（再求和），得到一个值，最终这些值组成一个新的处理后的图片。</p>
+<p><img src="https://wx4.sinaimg.cn/mw690/67111f6aly1fhykes5sffg207g05gdgf.gif" alt="卷积"></p>
+<center>*这张图实在太直观了，原谅我的偷图*</center>
+
+<p>想象一下我们有一个3X3的卷积，它的卷积核是这样的：<br>$$<br>\begin{matrix}<br> 0 &amp; 1 &amp; 0 \<br> 0 &amp; 1 &amp; 0 \<br> 0 &amp; 1 &amp; 0 \end{matrix}<br>$$<br>那么只有框框中间这一竖的数值会对输出造成影响，如果恰好框框移动到的这个部分也是这样中间一竖数值很大，那么输出的数值就会比其他形状的高，这时候我们的框框就“发亮”了。</p>
+<p>我们在训练的时候其实就是针对卷积核进行训练，去找到符合我们要求的矩阵作为核，在指定的情况下能够“发亮”</p>
+<p>最初几层的卷积只能识别一些很低级简单的形状，但随着我们不断堆叠卷积层，到后面卷积将能够识别许多复杂的特征。</p>
+<p>除了卷积的大小（如上述的3X3）外，还有几个比较重要的参数：</p>
+<p><strong>步长（stride）</strong>：每次卷积核移动几格（像素），上述说的逐格移动实际上就是步长为1</p>
+<p><strong>zero-padding</strong>:设想一下，如果原图是28*28这样，我们的核是5*5的，那最后算出来的新图是不是会变成24*24（28-2-2）呢，如果要避免这种情况，那么我们可以让核的中心对齐图片的左上角，让核的中心经过图片的每一个点。至于核这个框框中在图片外的部分，就全部填上0（相当于就是给图片加了一圈黑边），这就是zero-padding。</p>
+<h3 id="池化"><a href="#池化" class="headerlink" title="池化"></a>池化</h3><p>（卷积之后上会用relu激活，再进入池化）</p>
+<p>经过卷积之后，我们发现数据量不但没有减少（新图片还是28*28），反而增多了（每个核都会输出一张新的图片），如果有32个核，那么一共就有28*28*32个特征。这个时候我们可以通过池化来压缩特征。下图为最大池化：</p>
+<p><img src="https://wx2.sinaimg.cn/mw690/0065SY2ely1fhyic5goncj30rg0ne436.jpg" alt="池化"></p>
+<p>我们用一个2*2的最大池来举例，把图片割成一个个2*2的格子，再在每个格子里选出最大值，拼成一张新图，这样28*28的图就变成12*12的了。</p>
+<p>当然也可以不用取最大值，也可以取平均之类的，那就变成平均池什么的了。不过最普遍的做法还是使用最大化池。</p>
+<h3 id="全连接与输出层"><a href="#全连接与输出层" class="headerlink" title="全连接与输出层"></a>全连接与输出层</h3><p>通过重复连接多个卷积（+Relu）与池化层之后，我们需要输出最后的结果，一般来说是在卷积池化层后连接一个（或多个）全连接层，最后使用softmax输出。</p>
+<p>全连接就是把前面的一层的每个节点都与后一层的每一个节点连接，不多说了。</p>
+<p>输出层则是指我们最终输出结果的层，如果是三个分类的多分类的话，那应该要输出一个向量,形如[0,1,0]，这个数组的和为1，在第二个位置上为1表示这个对象属于第二个分类。一般来说是输出一组概率，所以更可能是这样的：[0.1,0.7,0.2]，表示属于第二类的概率最大。</p>
+<p>那么我们如何将最后输出的值概率化并保证和值为1呢？</p>
+<p>我们会使用一个softmax层来处理，softmax函数相当于sigmoid函数的多分类版本，当分类只有两个时softmax与sigmoid是一样的。对一组数中的某个做softmax是这样的：<br>$$<br>softmax(x_i) =\frac{e^{x_i}}{\sum^{N}_{n=1}e^{x_n}}<br>$$<br>softmax将所有数字转化为概率，在一定情况下能够使大者愈大，并保证了其和为1。</p>
+<h2 id="神经杂谈"><a href="#神经杂谈" class="headerlink" title="神经杂谈"></a>神经杂谈</h2><p>到此为止，我们从头到尾梳理了一遍卷积神经网络的构成，包括了它与深度神经网络的共通之处，以及它独特的构成部分。我们基本能够理解一个卷积神经网络的组成了，并且现在可以较为轻松的看懂一个简单的卷积神经网络的代码，无论是用什么用什么框架书就的。</p>
+<p>我们可以来看一个tensorflow版本的卷积神经网络：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cnn_model_fn</span>(<span class="params">features, labels, mode</span>):</span></span><br><span class="line">  <span class="comment">#输入层</span></span><br><span class="line">  input_layer = tf.reshape(features, [<span class="number">-1</span>, <span class="number">32</span>, <span class="number">32</span>, <span class="number">3</span>])</span><br><span class="line"></span><br><span class="line">  <span class="comment">#卷积层1a</span></span><br><span class="line">  conv1a = tf.layers.conv2d(</span><br><span class="line">      inputs=input_layer,</span><br><span class="line">      filters=<span class="number">32</span>,<span class="comment">#卷积核个数</span></span><br><span class="line">      kernel_size=[<span class="number">3</span>, <span class="number">3</span>],<span class="comment">#卷积size</span></span><br><span class="line">      padding=<span class="string">&quot;same&quot;</span>,</span><br><span class="line">      activation=tf.nn.relu<span class="comment">#激活函数)</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">#卷积层1b</span></span><br><span class="line">  conv1b = tf.layers.conv2d(</span><br><span class="line">      inputs=conv1a,</span><br><span class="line">      filters=<span class="number">32</span>,</span><br><span class="line">      kernel_size=[<span class="number">3</span>, <span class="number">3</span>],</span><br><span class="line">      padding=<span class="string">&quot;same&quot;</span>,</span><br><span class="line">      activation=tf.nn.relu)</span><br><span class="line"></span><br><span class="line">  <span class="comment">#最大化池1</span></span><br><span class="line">  pool1 = tf.layers.max_pooling2d(inputs=conv1b, pool_size=[<span class="number">2</span>, <span class="number">2</span>], strides=<span class="number">2</span>)</span><br><span class="line">  <span class="comment">#dropout</span></span><br><span class="line">  dropout1 = tf.layers.dropout(</span><br><span class="line">      inputs=pool1, rate=<span class="number">0.25</span>, training=mode == tf.estimator.ModeKeys.TRAIN)</span><br><span class="line">  </span><br><span class="line">  <span class="comment">#卷积层2</span></span><br><span class="line">  conv2a = tf.layers.conv2d(</span><br><span class="line">      inputs=pool1,</span><br><span class="line">      filters=<span class="number">64</span>,</span><br><span class="line">      kernel_size=[<span class="number">3</span>, <span class="number">3</span>],</span><br><span class="line">      padding=<span class="string">&quot;same&quot;</span>,</span><br><span class="line">      activation=tf.nn.relu)</span><br><span class="line">  conv2b = tf.layers.conv2d(</span><br><span class="line">      inputs=conv2a,</span><br><span class="line">      filters=<span class="number">64</span>,</span><br><span class="line">      kernel_size=[<span class="number">3</span>, <span class="number">3</span>],</span><br><span class="line">      padding=<span class="string">&quot;same&quot;</span>,</span><br><span class="line">      activation=tf.nn.relu)   </span><br><span class="line">  <span class="comment">#最大化池2</span></span><br><span class="line">  pool2 = tf.layers.max_pooling2d(inputs=conv2b, pool_size=[<span class="number">2</span>, <span class="number">2</span>], strides=<span class="number">2</span>)  </span><br><span class="line">  dropout2 = tf.layers.dropout(</span><br><span class="line">      inputs=pool2, rate=<span class="number">0.25</span>, training=mode == tf.estimator.ModeKeys.TRAIN) </span><br><span class="line"></span><br><span class="line">  <span class="comment">#全连接层</span></span><br><span class="line">  flat = tf.reshape(dropout2, [<span class="number">-1</span>, <span class="number">8</span> * <span class="number">8</span> * <span class="number">64</span>])</span><br><span class="line">  dense = tf.layers.dense(inputs=flat, units=<span class="number">258</span>, activation=tf.nn.relu)</span><br><span class="line">  dropout = tf.layers.dropout(</span><br><span class="line">      inputs=dense, rate=<span class="number">0.5</span>, training=mode == tf.estimator.ModeKeys.TRAIN)</span><br><span class="line"></span><br><span class="line">  <span class="comment">#输出层</span></span><br><span class="line">  logits = tf.layers.dense(inputs=dropout, units=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">  predictions = &#123;</span><br><span class="line">      <span class="string">&quot;classes&quot;</span>: tf.argmax(input=logits, axis=<span class="number">1</span>,name=<span class="string">&quot;c&quot;</span>),</span><br><span class="line">      <span class="string">&quot;probabilities&quot;</span>: tf.nn.softmax(logits, name=<span class="string">&quot;softmax_tensor&quot;</span>)<span class="comment">#softmax</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> mode == tf.estimator.ModeKeys.PREDICT:</span><br><span class="line">    <span class="keyword">return</span> tf.estimator.EstimatorSpec(mode=mode, predictions=predictions)</span><br><span class="line"></span><br><span class="line">  <span class="comment">#使用对数损失作为loss</span></span><br><span class="line">  loss = tf.losses.log_loss(labels=labels, predictions=predictions[<span class="string">&quot;probabilities&quot;</span>][:,<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">  <span class="comment">#优化器</span></span><br><span class="line">  <span class="keyword">if</span> mode == tf.estimator.ModeKeys.TRAIN:</span><br><span class="line">    optimizer = tf.train.AdamOptimizer(learning_rate=<span class="number">0.0001</span>)<span class="comment">#Adam优化器，可以换成SGD</span></span><br><span class="line">    train_op = optimizer.minimize(</span><br><span class="line">        loss=loss,</span><br><span class="line">        global_step=tf.train.get_global_step())</span><br><span class="line">    <span class="keyword">return</span> tf.estimator.EstimatorSpec(mode=mode, loss=loss, train_op=train_op)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  eval_metric_ops = &#123;</span><br><span class="line">      <span class="string">&quot;accuracy&quot;</span>: tf.metrics.accuracy(</span><br><span class="line">          labels=labels, predictions=predictions[<span class="string">&quot;classes&quot;</span>])&#125;</span><br><span class="line">  <span class="keyword">return</span> tf.estimator.EstimatorSpec(</span><br><span class="line">      mode=mode, loss=loss, eval_metric_ops=eval_metric_ops)</span><br></pre></td></tr></table></figure>
+
+<p>这是用tensorflow教程代码改的一个cnn，怎么样，是不是每一部分都了如指掌？:dog:</p>
+<p>也可以去找keras、pytorch的教程cnn代码看一看，实际上了解原理之后，所有框架的代码看上去都大同小异。</p>
+<h3 id="古怪联想"><a href="#古怪联想" class="headerlink" title="古怪联想"></a>古怪联想</h3><p>其实我感觉神经网络给我一种挺熟悉的感觉，有点类似于我们平常做机器学习里的stacking方法，不过不同的是神经网络是组合多个多层线性模型，而stacking主要是对不同类型的机器学习算法如xgb、逻辑回归等进行组合。</p>
+<p>其中一些操作也相同，比如神经网络里dropout和sgd，和随机森林等ensemble算法类似，都是看似无理地引入随机性，但是这种随机性使得单位之间存在更多不同，而非简单的重复，在数量极大的单位的作用下反而使得总体性能变得更强了。</p>
+<p><img src="https://i.loli.net/2018/06/05/5b164ed771f14.jpeg" alt="妙啊"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://jonuknownothingsnow.github.io/2018/06/03/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" data-id="ckdzkkn420022xg5shg2thm47" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cnn/" rel="tag">cnn</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">卷积神经网络</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag">深度学习</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/" rel="tag">算法原理</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6/" rel="tag">谐门武学</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/06/18/%E8%B0%90%E9%97%A8%E7%AE%97%E6%B3%95%EF%BC%9A%E4%BD%BF%E7%94%A8%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          谐门算法：使用预训练模型
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/05/01/ROC/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">ROC与二分类模型评估</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%A8%E6%A0%88%E6%BA%A2%E5%87%BA%EF%BC%88%E7%AC%91%EF%BC%89/">全栈溢出（笑）</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/">实用技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B7%A5%E5%85%B7%E7%BB%8F%E9%AA%8C/">工具经验</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E4%B8%8E%E7%AE%97%E6%B3%95/">数据与算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">数据分析</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E8%B5%9B%E4%BA%8B/">数据赛事</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95-%E6%A8%A1%E5%9E%8B/">算法/模型</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95%E6%A8%A1%E5%9E%8B/">算法模型</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6/">谐门武学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%B2%E5%9D%91%E6%8C%87%E5%8D%97/">防坑指南</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9B%B6%E6%95%A3%E8%AE%B0%E5%BD%95/">零散记录</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Albert/" rel="tag">Albert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Attention/" rel="tag">Attention</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AutoML/" rel="tag">AutoML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BERT/" rel="tag">BERT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BI%E7%AB%99%E7%82%B9/" rel="tag">BI站点</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BI%E7%BB%9D%E5%AD%A6/" rel="tag">BI绝学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bert/" rel="tag">Bert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bokeh/" rel="tag">Bokeh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Colaboratory/" rel="tag">Colaboratory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/" rel="tag">ELK</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Flask/" rel="tag">Flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GPU/" rel="tag">GPU</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hive/" rel="tag">Hive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jupyter-Notebook/" rel="tag">Jupyter Notebook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JupyterHub/" rel="tag">JupyterHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keras/" rel="tag">Keras</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kubernetes/" rel="tag">Kubernetes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LSTM/" rel="tag">LSTM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Metric/" rel="tag">Metric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NLP/" rel="tag">NLP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Odin/" rel="tag">Odin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pytorch/" rel="tag">Pytorch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/R/" rel="tag">R</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ray/" rel="tag">Ray</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Roberta/" rel="tag">Roberta</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scikit-learn/" rel="tag">Scikit-learn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Supervisor/" rel="tag">Supervisor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tensorflow/" rel="tag">Tensorflow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Transformer/" rel="tag">Transformer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cnn/" rel="tag">cnn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gensim/" rel="tag">gensim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tensorflow/" rel="tag">tensorflow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E6%A1%86%E6%9E%B6/" rel="tag">web框架</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%9A%E5%86%85%E6%96%B0%E9%97%BB/" rel="tag">业内新闻</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E5%88%86%E7%B1%BB/" rel="tag">二分类</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag">云服务器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0/" rel="tag">代码实现</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/" rel="tag">优化方法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%A0%E7%BB%9F%E7%AE%97%E6%B3%95/" rel="tag">传统算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%A8%E6%A1%9F%E6%BA%A2%E5%87%BA/" rel="tag">全桟溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%B3%E7%AD%96%E6%A0%91/" rel="tag">决策树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/" rel="tag">分布式计算</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E9%A6%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">前馈神经网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%AA%E6%9E%9D/" rel="tag">剪枝</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%9A%E5%AE%A2/" rel="tag">博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">卷积神经网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%82%E6%95%B0%E4%BC%98%E5%8C%96/" rel="tag">参数优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF%E5%B7%A5%E7%A8%8B/" rel="tag">后端工程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB/" rel="tag">图像识别</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" rel="tag">基本操作</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E6%A0%87%E7%AD%BE%E5%88%86%E7%B1%BB/" rel="tag">多标签分类</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9E%E6%88%98%E6%8A%80%E5%B7%A7/" rel="tag">实战技巧</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/" rel="tag">容器化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%86%E5%BA%A6%E8%81%9A%E7%B1%BB/" rel="tag">密度聚类</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7%E7%BB%8F%E9%AA%8C/" rel="tag">工具经验</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80/" rel="tag">工程基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E7%BB%8F%E9%AA%8C/" rel="tag">工程经验</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E6%AD%A5/" rel="tag">异步</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%89%8B%E5%86%99%E7%AE%97%E6%B3%95/" rel="tag">手写算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" rel="tag">数据分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">数据可视化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" rel="tag">数据处理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98/" rel="tag">数据挖掘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/" rel="tag">日志管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8/" rel="tag">显卡驱动</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9E%B6%E6%9E%84%E7%BB%9D%E5%AD%A6/" rel="tag">架构绝学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2/" rel="tag">模型部署</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag">深度学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%81%8C%E6%B0%B4/" rel="tag">灌水</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/" rel="tag">特征工程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9/" rel="tag">特征选择</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" rel="tag">环境搭建</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E9%97%AE%E9%A2%98/" rel="tag">环境问题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A9%B7%E9%AC%BC%E7%A7%98%E7%B1%8D/" rel="tag">穷鬼秘籍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/" rel="tag">算法原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0/" rel="tag">算法实现</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E6%80%A7%E8%83%BD/" rel="tag">算法性能</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E9%83%A8%E7%BD%B2/" rel="tag">算法部署</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" rel="tag">线性回归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95/" rel="tag">经典算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95/" rel="tag">聚类算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/" rel="tag">自动化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" rel="tag">自然语言处理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%AD%E7%BB%83%E6%8A%80%E5%B7%A7/" rel="tag">训练技巧</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BA%E6%96%87%E5%AE%9E%E7%8E%B0/" rel="tag">论文实现</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87/" rel="tag">评估指标</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%8D%E5%90%91%E9%87%8F%E5%8C%96/" rel="tag">词向量化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6/" rel="tag">谐门武学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B0%90%E9%97%A8%E9%80%9F%E6%94%BB/" rel="tag">谐门速攻</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" rel="tag">踩坑记录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/" rel="tag">迁移学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%80%BB%E8%BE%91%E6%96%AF%E8%92%82%E5%9B%9E%E5%BD%92/" rel="tag">逻辑斯蒂回归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" rel="tag">随机森林</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E6%88%90%E7%AE%97%E6%B3%95/" rel="tag">集成算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="tag">面向对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/" rel="tag">预训练模型</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Albert/" style="font-size: 10px;">Albert</a> <a href="/tags/Attention/" style="font-size: 11.25px;">Attention</a> <a href="/tags/AutoML/" style="font-size: 10px;">AutoML</a> <a href="/tags/BERT/" style="font-size: 10px;">BERT</a> <a href="/tags/BI%E7%AB%99%E7%82%B9/" style="font-size: 11.25px;">BI站点</a> <a href="/tags/BI%E7%BB%9D%E5%AD%A6/" style="font-size: 10px;">BI绝学</a> <a href="/tags/Bert/" style="font-size: 10px;">Bert</a> <a href="/tags/Bokeh/" style="font-size: 10px;">Bokeh</a> <a href="/tags/Colaboratory/" style="font-size: 10px;">Colaboratory</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/ELK/" style="font-size: 10px;">ELK</a> <a href="/tags/Flask/" style="font-size: 10px;">Flask</a> <a href="/tags/GPU/" style="font-size: 10px;">GPU</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Jupyter-Notebook/" style="font-size: 10px;">Jupyter Notebook</a> <a href="/tags/JupyterHub/" style="font-size: 11.25px;">JupyterHub</a> <a href="/tags/Keras/" style="font-size: 12.5px;">Keras</a> <a href="/tags/Kubernetes/" style="font-size: 11.25px;">Kubernetes</a> <a href="/tags/LSTM/" style="font-size: 10px;">LSTM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Metric/" style="font-size: 10px;">Metric</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/NLP/" style="font-size: 15px;">NLP</a> <a href="/tags/Odin/" style="font-size: 11.25px;">Odin</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Pytorch/" style="font-size: 10px;">Pytorch</a> <a href="/tags/R/" style="font-size: 10px;">R</a> <a href="/tags/Ray/" style="font-size: 10px;">Ray</a> <a href="/tags/Roberta/" style="font-size: 10px;">Roberta</a> <a href="/tags/Scikit-learn/" style="font-size: 10px;">Scikit-learn</a> <a href="/tags/Supervisor/" style="font-size: 10px;">Supervisor</a> <a href="/tags/Tensorflow/" style="font-size: 12.5px;">Tensorflow</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/cnn/" style="font-size: 10px;">cnn</a> <a href="/tags/docker/" style="font-size: 12.5px;">docker</a> <a href="/tags/gensim/" style="font-size: 10px;">gensim</a> <a href="/tags/tensorflow/" style="font-size: 10px;">tensorflow</a> <a href="/tags/web%E6%A1%86%E6%9E%B6/" style="font-size: 10px;">web框架</a> <a href="/tags/%E4%B8%9A%E5%86%85%E6%96%B0%E9%97%BB/" style="font-size: 11.25px;">业内新闻</a> <a href="/tags/%E4%BA%8C%E5%88%86%E7%B1%BB/" style="font-size: 10px;">二分类</a> <a href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10px;">云服务器</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0/" style="font-size: 11.25px;">代码实现</a> <a href="/tags/%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/" style="font-size: 10px;">优化方法</a> <a href="/tags/%E4%BC%A0%E7%BB%9F%E7%AE%97%E6%B3%95/" style="font-size: 11.25px;">传统算法</a> <a href="/tags/%E5%85%A8%E6%A1%9F%E6%BA%A2%E5%87%BA/" style="font-size: 10px;">全桟溢出</a> <a href="/tags/%E5%86%B3%E7%AD%96%E6%A0%91/" style="font-size: 11.25px;">决策树</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/" style="font-size: 10px;">分布式计算</a> <a href="/tags/%E5%89%8D%E9%A6%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 10px;">前馈神经网络</a> <a href="/tags/%E5%89%AA%E6%9E%9D/" style="font-size: 10px;">剪枝</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 10px;">博客</a> <a href="/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 11.25px;">卷积神经网络</a> <a href="/tags/%E5%8F%82%E6%95%B0%E4%BC%98%E5%8C%96/" style="font-size: 10px;">参数优化</a> <a href="/tags/%E5%90%8E%E7%AB%AF%E5%B7%A5%E7%A8%8B/" style="font-size: 10px;">后端工程</a> <a href="/tags/%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB/" style="font-size: 11.25px;">图像识别</a> <a href="/tags/%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" style="font-size: 10px;">基本操作</a> <a href="/tags/%E5%A4%9A%E6%A0%87%E7%AD%BE%E5%88%86%E7%B1%BB/" style="font-size: 10px;">多标签分类</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 12.5px;">大数据</a> <a href="/tags/%E5%AE%9E%E6%88%98%E6%8A%80%E5%B7%A7/" style="font-size: 10px;">实战技巧</a> <a href="/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/" style="font-size: 11.25px;">容器化</a> <a href="/tags/%E5%AF%86%E5%BA%A6%E8%81%9A%E7%B1%BB/" style="font-size: 10px;">密度聚类</a> <a href="/tags/%E5%B7%A5%E5%85%B7%E7%BB%8F%E9%AA%8C/" style="font-size: 11.25px;">工具经验</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80/" style="font-size: 12.5px;">工程基础</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E7%BB%8F%E9%AA%8C/" style="font-size: 13.75px;">工程经验</a> <a href="/tags/%E5%BC%82%E6%AD%A5/" style="font-size: 11.25px;">异步</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 12.5px;">性能优化</a> <a href="/tags/%E6%89%8B%E5%86%99%E7%AE%97%E6%B3%95/" style="font-size: 10px;">手写算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" style="font-size: 11.25px;">数据分析</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 11.25px;">数据可视化</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" style="font-size: 12.5px;">数据处理</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 10px;">数据库</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98/" style="font-size: 11.25px;">数据挖掘</a> <a href="/tags/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/" style="font-size: 11.25px;">日志管理</a> <a href="/tags/%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8/" style="font-size: 10px;">显卡驱动</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 20px;">机器学习</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E7%BB%9D%E5%AD%A6/" style="font-size: 11.25px;">架构绝学</a> <a href="/tags/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2/" style="font-size: 10px;">模型部署</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 17.5px;">深度学习</a> <a href="/tags/%E7%81%8C%E6%B0%B4/" style="font-size: 13.75px;">灌水</a> <a href="/tags/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/" style="font-size: 12.5px;">特征工程</a> <a href="/tags/%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9/" style="font-size: 10px;">特征选择</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" style="font-size: 10px;">环境搭建</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E9%97%AE%E9%A2%98/" style="font-size: 10px;">环境问题</a> <a href="/tags/%E7%A9%B7%E9%AC%BC%E7%A7%98%E7%B1%8D/" style="font-size: 10px;">穷鬼秘籍</a> <a href="/tags/%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/" style="font-size: 16.25px;">算法原理</a> <a href="/tags/%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0/" style="font-size: 10px;">算法实现</a> <a href="/tags/%E7%AE%97%E6%B3%95%E6%80%A7%E8%83%BD/" style="font-size: 10px;">算法性能</a> <a href="/tags/%E7%AE%97%E6%B3%95%E9%83%A8%E7%BD%B2/" style="font-size: 11.25px;">算法部署</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" style="font-size: 10px;">线性回归</a> <a href="/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95/" style="font-size: 10px;">经典算法</a> <a href="/tags/%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95/" style="font-size: 10px;">聚类算法</a> <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/" style="font-size: 10px;">自动化</a> <a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" style="font-size: 12.5px;">自然语言处理</a> <a href="/tags/%E8%AE%AD%E7%BB%83%E6%8A%80%E5%B7%A7/" style="font-size: 11.25px;">训练技巧</a> <a href="/tags/%E8%AE%BA%E6%96%87%E5%AE%9E%E7%8E%B0/" style="font-size: 10px;">论文实现</a> <a href="/tags/%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87/" style="font-size: 10px;">评估指标</a> <a href="/tags/%E8%AF%8D%E5%90%91%E9%87%8F%E5%8C%96/" style="font-size: 10px;">词向量化</a> <a href="/tags/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6/" style="font-size: 18.75px;">谐门武学</a> <a href="/tags/%E8%B0%90%E9%97%A8%E9%80%9F%E6%94%BB/" style="font-size: 11.25px;">谐门速攻</a> <a href="/tags/%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" style="font-size: 10px;">踩坑记录</a> <a href="/tags/%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/" style="font-size: 11.25px;">迁移学习</a> <a href="/tags/%E9%80%BB%E8%BE%91%E6%96%AF%E8%92%82%E5%9B%9E%E5%BD%92/" style="font-size: 10px;">逻辑斯蒂回归</a> <a href="/tags/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" style="font-size: 10px;">随机森林</a> <a href="/tags/%E9%9B%86%E6%88%90%E7%AE%97%E6%B3%95/" style="font-size: 10px;">集成算法</a> <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" style="font-size: 10px;">面向对象</a> <a href="/tags/%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/" style="font-size: 12.5px;">预训练模型</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/08/18/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/15/NLP%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E5%88%86%E4%BA%AB/">谐门武学-NLP预训练模型服务分享</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/13/%E9%9B%B6%E6%95%A3%E8%AE%B0%E5%BD%9520200613/">零散记录:20200613</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/25/%E9%9B%B6%E6%95%A3%E8%AE%B0%E5%BD%95:20200425/">零散记录:20200425</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/18/Python%E8%B0%83%E7%94%A8c%E4%BB%A3%E7%A0%81/">Python调用c代码</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 王大炮<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

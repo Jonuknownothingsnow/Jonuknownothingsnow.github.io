@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>谐门武学:Tensorflow GPU踩坑记录 | 火力支援</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="谐门武学:Tensorflow GPU踩坑记录最近咱们搞了一台新的主机，也有了靠谱的GPU，是时候来重拾深度学习的一些工作了。搞tensorflow的GPU 环境的时候还是踩了一些坑，这里记录一下。 使用Docker快速搭建环境假如你在使用GTX1080TI之类的显卡，其实在搭建GPU版的tensorflow还是挺方便的 ，你只需要确认装好了新的显卡驱动，装下docker和nvidia-docke">
+<meta property="og:type" content="article">
+<meta property="og:title" content="谐门武学:Tensorflow GPU踩坑记录">
+<meta property="og:url" content="https://jonuknownothingsnow.github.io/2018/12/01/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6%EF%BC%9A%E4%BD%BF%E7%94%A8DOCKER%E6%90%AD%E5%BB%BAtensorflow%20%E7%9A%84gpu%E7%8E%AF%E5%A2%83/index.html">
+<meta property="og:site_name" content="火力支援">
+<meta property="og:description" content="谐门武学:Tensorflow GPU踩坑记录最近咱们搞了一台新的主机，也有了靠谱的GPU，是时候来重拾深度学习的一些工作了。搞tensorflow的GPU 环境的时候还是踩了一些坑，这里记录一下。 使用Docker快速搭建环境假如你在使用GTX1080TI之类的显卡，其实在搭建GPU版的tensorflow还是挺方便的 ，你只需要确认装好了新的显卡驱动，装下docker和nvidia-docke">
+<meta property="og:locale">
+<meta property="article:published_time" content="2018-11-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-08-18T06:31:54.691Z">
+<meta property="article:author" content="王大炮">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="Tensorflow">
+<meta property="article:tag" content="踩坑记录">
+<meta property="article:tag" content="环境搭建">
+<meta property="article:tag" content="GPU">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="火力支援" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.0.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">火力支援</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://jonuknownothingsnow.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-谐门武学：使用DOCKER搭建tensorflow 的gpu环境" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/01/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6%EF%BC%9A%E4%BD%BF%E7%94%A8DOCKER%E6%90%AD%E5%BB%BAtensorflow%20%E7%9A%84gpu%E7%8E%AF%E5%A2%83/" class="article-date">
+  <time datetime="2018-11-30T16:00:00.000Z" itemprop="datePublished">2018-12-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%B7%A5%E5%85%B7%E7%BB%8F%E9%AA%8C/">工具经验</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      谐门武学:Tensorflow GPU踩坑记录
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="谐门武学-Tensorflow-GPU踩坑记录"><a href="#谐门武学-Tensorflow-GPU踩坑记录" class="headerlink" title="谐门武学:Tensorflow GPU踩坑记录"></a>谐门武学:Tensorflow GPU踩坑记录</h1><p>最近咱们搞了一台新的主机，也有了靠谱的GPU，是时候来重拾深度学习的一些工作了。搞tensorflow的GPU 环境的时候还是踩了一些坑，这里记录一下。</p>
+<h2 id="使用Docker快速搭建环境"><a href="#使用Docker快速搭建环境" class="headerlink" title="使用Docker快速搭建环境"></a>使用Docker快速搭建环境</h2><p>假如你在使用GTX1080TI之类的显卡，其实在搭建GPU版的tensorflow还是挺方便的 ，你只需要确认装好了新的显卡驱动，装下docker和nvidia-docker2。然后直接跑官方的docker镜像就好了,注意使用的版本，比如我习惯用python3，我就拉latest-gpu-py3这个标签的镜像：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --runtime=nvidia -u root -p 8888:8888  -v ~/data:/notebooks -it tensorflow/tensorflow:latest-gpu-py3</span><br></pre></td></tr></table></figure>
+
+<p>简单介绍下这句docker的意思</p>
+<p><strong>docker run</strong> 运行镜像</p>
+<p><strong>–runtime=nvidia</strong> 使用nvidia-docker2</p>
+<p><strong>-u root</strong> 使用root用户</p>
+<p><strong>-p 8888:8888</strong> 将宿主机的8888端口映射给容器的8888端口</p>
+<p><strong>-v ~/data:/notebook</strong> 将宿主机的~/data目录挂载到容器的/notebook目录上</p>
+<p><strong>-it</strong> 进入容器</p>
+<p><strong>tensorflow/tensorflow:latest-gpu-py3</strong> tensorflow官方镜像的py3 gpu版本。</p>
+<p>运行完就可以根据提示进入运行在本地8888端口的jupyter notebook来操作容器了，因为docker其实就像个虚拟机，所以在这里面无论怎么瞎胡搞都无所谓。</p>
+<h2 id="使用CUDA10版本"><a href="#使用CUDA10版本" class="headerlink" title="使用CUDA10版本"></a>使用CUDA10版本</h2><p>本文到上一节本来已经happy ending，但是假如你也和我一样，买新不买旧搞了个RTX 2080ti啥的话，故事就开始变得复杂了。</p>
+<a id="more"></a>
+
+
+
+<p>我这里就不多说我是怎么发现kernel挂掉，一步步排查试错排查找到症结的过程了，这个真的痛苦的要死，我就讲讲结论吧，结论是最终我找到了tensorflow在github上的一个issue，里面说到RTX系列的显卡在cuda9上运行时会和tensorflow的卷积层发生一些未知的问题，这个问题在这个老哥手动编译了cuda10版本的tensorflow后解决了。这位老哥还在issue里提到，有风声说tensorflow的1.13版本可能会在明年一月出，也就是说在那之前，我们都不可能有官方cuda10版本的tensorflow了。</p>
+<p>好吧，那么我们就只能自己搞一个了。</p>
+<h3 id="拉取tfboyd版本的tensorflow"><a href="#拉取tfboyd版本的tensorflow" class="headerlink" title="拉取tfboyd版本的tensorflow"></a>拉取tfboyd版本的tensorflow</h3><p>拉取这个先锋老哥的<a target="_blank" rel="noopener" href="https://github.com/tfboyd/tensorflow/">tensorflow库</a>，虽然看上去很野鸡，不过其实大部分代码都和官方库一样，只是改了下dockerfile相关的一点点东西，所以无所谓了，直接载个压缩包再解压也行。</p>
+<h3 id="重新生成Dockerfile"><a href="#重新生成Dockerfile" class="headerlink" title="重新生成Dockerfile"></a>重新生成Dockerfile</h3><p>需要注意的是，拉到上面这个版本的tensorflow之后，你会发现它的dockerfiles还是cuda9版本的，其实老哥已经在组件里改成cuda10了，我们只需要重新生成一下dockerfile。</p>
+<p>这里稍微吹一下谷歌的代码结构，他们的这个dockerfile不是直接手动写的，而是通过一个脚本将不同的组件组合生成的，有点实力，可以学习借鉴一下。</p>
+<p>首先进到tensorflow/tensorflow/tools/dockfiles文件夹下。</p>
+<p>然后build组装程序：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t tf-assembler -f assembler.Dockerfile .</span><br></pre></td></tr></table></figure>
+
+<p>完成后启动组装镜像并进入(我这里挂载了data文件夹，具体要挂载什么看你自己的情况）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --user root -it -v &#x2F;data:&#x2F;tf tf-assembler bash </span><br></pre></td></tr></table></figure>
+
+<p>在镜像中再进到tensorflow/tensorflow/tools/dockfiles这个文件夹下，运行组装脚本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 .&#x2F;assembler.py -o dockerfiles -s spec.yml</span><br></pre></td></tr></table></figure>
+
+<p>完成后退出，就发现dockerfile已经变成cuda10版本的了。</p>
+<h3 id="Build并运行镜像"><a href="#Build并运行镜像" class="headerlink" title="Build并运行镜像"></a>Build并运行镜像</h3><p>现在我们可以来build cuda10版本的镜像了：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker build -f ./nvidia-devel-jupyter.Dockerfile -t tf .</span><br></pre></td></tr></table></figure>
+
+<p>运行镜像：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run --runtime=nvidia -u root -p 8888:8888  -v ~/data:/notebooks  -it tf</span><br></pre></td></tr></table></figure>
+
+<p>你会发现有个notebook已经运行在你的8888端口，这就是cuda10的环境了。</p>
+<h3 id="安装cuda10的tensorflow"><a href="#安装cuda10的tensorflow" class="headerlink" title="安装cuda10的tensorflow"></a>安装cuda10的tensorflow</h3><p>进入环境后你会发现，这里面并没有安装tensorflow，我们直接安装一个编译好的cuda10版本的tensorflow ，like this:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install https://storage.googleapis.com/tf-performance/tf_binary/tensorflow-1.12.0rc0.1a6dea3.AVX2-cp35-cp35m-linux_x86_64.whl</span><br></pre></td></tr></table></figure>
+
+<p>我用的是<a target="_blank" rel="noopener" href="https://storage.googleapis.com/tf-performance/tf_binary/tensorflow-1.12.0rc0.1a6dea3.AVX2-cp35-cp35m-linux_x86_64.whl">这个</a>,要用其他版本可以看这个<a target="_blank" rel="noopener" href="https://github.com/tensorflow/tensorflow/issues/22706">页面</a></p>
+<p>如果你不想每次开都重新安装的话，可以把这个写进dockerfile里，重新build一下镜像：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">RUN</span><span class="bash"> <span class="variable">$&#123;PIP&#125;</span> install https://storage.googleapis.com/tf-performance/tf_binary/tensorflow-1.12.0rc0.1a6dea3.AVX2-cp35-cp35m-linux_x86_64.whl</span></span><br></pre></td></tr></table></figure>
+
+<p>加上这句就好了。如果是notebook版本的话记得加在这句前面：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">&quot;bash&quot;</span>, <span class="string">&quot;-c&quot;</span>, <span class="string">&quot;source /etc/bash.bashrc &amp;&amp; jupyter notebook --notebook-dir=/notebooks --ip 0.0.0.0 --no-browser --allow-root&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="乌拉-！"><a href="#乌拉-！" class="headerlink" title="乌拉~！"></a>乌拉~！</h2><p>我们现在可以在用2080ti+cuda10 来跑tensorflow拉，乌拉~！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://jonuknownothingsnow.github.io/2018/12/01/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6%EF%BC%9A%E4%BD%BF%E7%94%A8DOCKER%E6%90%AD%E5%BB%BAtensorflow%20%E7%9A%84gpu%E7%8E%AF%E5%A2%83/" data-id="ckdzkkn630078xg5s7kwp6k4n" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GPU/" rel="tag">GPU</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tensorflow/" rel="tag">Tensorflow</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag">深度学习</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" rel="tag">环境搭建</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" rel="tag">踩坑记录</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/12/21/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6%EF%BC%9A%E4%B8%89%E5%88%86%E9%92%9F%E5%AD%A6%E4%BC%9A%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E5%B1%A0%E9%BE%99%E5%88%80BERT/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          谐门速攻：三分钟学会使用屠龙刀BERT
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/10/21/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6%EF%BC%9A%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9%E4%B8%8ENull%20Importance/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">谐门武学：特征选择与Null Importance</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%A8%E6%A0%88%E6%BA%A2%E5%87%BA%EF%BC%88%E7%AC%91%EF%BC%89/">全栈溢出（笑）</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/">实用技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B7%A5%E5%85%B7%E7%BB%8F%E9%AA%8C/">工具经验</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E4%B8%8E%E7%AE%97%E6%B3%95/">数据与算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">数据分析</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E8%B5%9B%E4%BA%8B/">数据赛事</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95-%E6%A8%A1%E5%9E%8B/">算法/模型</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95%E6%A8%A1%E5%9E%8B/">算法模型</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6/">谐门武学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%B2%E5%9D%91%E6%8C%87%E5%8D%97/">防坑指南</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9B%B6%E6%95%A3%E8%AE%B0%E5%BD%95/">零散记录</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Albert/" rel="tag">Albert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Attention/" rel="tag">Attention</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AutoML/" rel="tag">AutoML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BERT/" rel="tag">BERT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BI%E7%AB%99%E7%82%B9/" rel="tag">BI站点</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BI%E7%BB%9D%E5%AD%A6/" rel="tag">BI绝学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bert/" rel="tag">Bert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bokeh/" rel="tag">Bokeh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Colaboratory/" rel="tag">Colaboratory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/" rel="tag">ELK</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Flask/" rel="tag">Flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GPU/" rel="tag">GPU</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hive/" rel="tag">Hive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jupyter-Notebook/" rel="tag">Jupyter Notebook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JupyterHub/" rel="tag">JupyterHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keras/" rel="tag">Keras</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kubernetes/" rel="tag">Kubernetes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LSTM/" rel="tag">LSTM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Metric/" rel="tag">Metric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NLP/" rel="tag">NLP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Odin/" rel="tag">Odin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pytorch/" rel="tag">Pytorch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/R/" rel="tag">R</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ray/" rel="tag">Ray</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Roberta/" rel="tag">Roberta</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scikit-learn/" rel="tag">Scikit-learn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Supervisor/" rel="tag">Supervisor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tensorflow/" rel="tag">Tensorflow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Transformer/" rel="tag">Transformer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cnn/" rel="tag">cnn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gensim/" rel="tag">gensim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tensorflow/" rel="tag">tensorflow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E6%A1%86%E6%9E%B6/" rel="tag">web框架</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%9A%E5%86%85%E6%96%B0%E9%97%BB/" rel="tag">业内新闻</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E5%88%86%E7%B1%BB/" rel="tag">二分类</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag">云服务器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0/" rel="tag">代码实现</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/" rel="tag">优化方法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%A0%E7%BB%9F%E7%AE%97%E6%B3%95/" rel="tag">传统算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%A8%E6%A1%9F%E6%BA%A2%E5%87%BA/" rel="tag">全桟溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%B3%E7%AD%96%E6%A0%91/" rel="tag">决策树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/" rel="tag">分布式计算</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E9%A6%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">前馈神经网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%AA%E6%9E%9D/" rel="tag">剪枝</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%9A%E5%AE%A2/" rel="tag">博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">卷积神经网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%82%E6%95%B0%E4%BC%98%E5%8C%96/" rel="tag">参数优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF%E5%B7%A5%E7%A8%8B/" rel="tag">后端工程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB/" rel="tag">图像识别</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" rel="tag">基本操作</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E6%A0%87%E7%AD%BE%E5%88%86%E7%B1%BB/" rel="tag">多标签分类</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9E%E6%88%98%E6%8A%80%E5%B7%A7/" rel="tag">实战技巧</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/" rel="tag">容器化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%86%E5%BA%A6%E8%81%9A%E7%B1%BB/" rel="tag">密度聚类</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7%E7%BB%8F%E9%AA%8C/" rel="tag">工具经验</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80/" rel="tag">工程基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E7%BB%8F%E9%AA%8C/" rel="tag">工程经验</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E6%AD%A5/" rel="tag">异步</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%89%8B%E5%86%99%E7%AE%97%E6%B3%95/" rel="tag">手写算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" rel="tag">数据分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">数据可视化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" rel="tag">数据处理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98/" rel="tag">数据挖掘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/" rel="tag">日志管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8/" rel="tag">显卡驱动</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9E%B6%E6%9E%84%E7%BB%9D%E5%AD%A6/" rel="tag">架构绝学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2/" rel="tag">模型部署</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag">深度学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%81%8C%E6%B0%B4/" rel="tag">灌水</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/" rel="tag">特征工程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9/" rel="tag">特征选择</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" rel="tag">环境搭建</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E9%97%AE%E9%A2%98/" rel="tag">环境问题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A9%B7%E9%AC%BC%E7%A7%98%E7%B1%8D/" rel="tag">穷鬼秘籍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/" rel="tag">算法原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0/" rel="tag">算法实现</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E6%80%A7%E8%83%BD/" rel="tag">算法性能</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E9%83%A8%E7%BD%B2/" rel="tag">算法部署</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" rel="tag">线性回归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95/" rel="tag">经典算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95/" rel="tag">聚类算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/" rel="tag">自动化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" rel="tag">自然语言处理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%AD%E7%BB%83%E6%8A%80%E5%B7%A7/" rel="tag">训练技巧</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BA%E6%96%87%E5%AE%9E%E7%8E%B0/" rel="tag">论文实现</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87/" rel="tag">评估指标</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%8D%E5%90%91%E9%87%8F%E5%8C%96/" rel="tag">词向量化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6/" rel="tag">谐门武学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B0%90%E9%97%A8%E9%80%9F%E6%94%BB/" rel="tag">谐门速攻</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" rel="tag">踩坑记录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/" rel="tag">迁移学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%80%BB%E8%BE%91%E6%96%AF%E8%92%82%E5%9B%9E%E5%BD%92/" rel="tag">逻辑斯蒂回归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" rel="tag">随机森林</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E6%88%90%E7%AE%97%E6%B3%95/" rel="tag">集成算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="tag">面向对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/" rel="tag">预训练模型</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Albert/" style="font-size: 10px;">Albert</a> <a href="/tags/Attention/" style="font-size: 11.25px;">Attention</a> <a href="/tags/AutoML/" style="font-size: 10px;">AutoML</a> <a href="/tags/BERT/" style="font-size: 10px;">BERT</a> <a href="/tags/BI%E7%AB%99%E7%82%B9/" style="font-size: 11.25px;">BI站点</a> <a href="/tags/BI%E7%BB%9D%E5%AD%A6/" style="font-size: 10px;">BI绝学</a> <a href="/tags/Bert/" style="font-size: 10px;">Bert</a> <a href="/tags/Bokeh/" style="font-size: 10px;">Bokeh</a> <a href="/tags/Colaboratory/" style="font-size: 10px;">Colaboratory</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/ELK/" style="font-size: 10px;">ELK</a> <a href="/tags/Flask/" style="font-size: 10px;">Flask</a> <a href="/tags/GPU/" style="font-size: 10px;">GPU</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Jupyter-Notebook/" style="font-size: 10px;">Jupyter Notebook</a> <a href="/tags/JupyterHub/" style="font-size: 11.25px;">JupyterHub</a> <a href="/tags/Keras/" style="font-size: 12.5px;">Keras</a> <a href="/tags/Kubernetes/" style="font-size: 11.25px;">Kubernetes</a> <a href="/tags/LSTM/" style="font-size: 10px;">LSTM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Metric/" style="font-size: 10px;">Metric</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/NLP/" style="font-size: 15px;">NLP</a> <a href="/tags/Odin/" style="font-size: 11.25px;">Odin</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Pytorch/" style="font-size: 10px;">Pytorch</a> <a href="/tags/R/" style="font-size: 10px;">R</a> <a href="/tags/Ray/" style="font-size: 10px;">Ray</a> <a href="/tags/Roberta/" style="font-size: 10px;">Roberta</a> <a href="/tags/Scikit-learn/" style="font-size: 10px;">Scikit-learn</a> <a href="/tags/Supervisor/" style="font-size: 10px;">Supervisor</a> <a href="/tags/Tensorflow/" style="font-size: 12.5px;">Tensorflow</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/cnn/" style="font-size: 10px;">cnn</a> <a href="/tags/docker/" style="font-size: 12.5px;">docker</a> <a href="/tags/gensim/" style="font-size: 10px;">gensim</a> <a href="/tags/tensorflow/" style="font-size: 10px;">tensorflow</a> <a href="/tags/web%E6%A1%86%E6%9E%B6/" style="font-size: 10px;">web框架</a> <a href="/tags/%E4%B8%9A%E5%86%85%E6%96%B0%E9%97%BB/" style="font-size: 11.25px;">业内新闻</a> <a href="/tags/%E4%BA%8C%E5%88%86%E7%B1%BB/" style="font-size: 10px;">二分类</a> <a href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10px;">云服务器</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0/" style="font-size: 11.25px;">代码实现</a> <a href="/tags/%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/" style="font-size: 10px;">优化方法</a> <a href="/tags/%E4%BC%A0%E7%BB%9F%E7%AE%97%E6%B3%95/" style="font-size: 11.25px;">传统算法</a> <a href="/tags/%E5%85%A8%E6%A1%9F%E6%BA%A2%E5%87%BA/" style="font-size: 10px;">全桟溢出</a> <a href="/tags/%E5%86%B3%E7%AD%96%E6%A0%91/" style="font-size: 11.25px;">决策树</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/" style="font-size: 10px;">分布式计算</a> <a href="/tags/%E5%89%8D%E9%A6%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 10px;">前馈神经网络</a> <a href="/tags/%E5%89%AA%E6%9E%9D/" style="font-size: 10px;">剪枝</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 10px;">博客</a> <a href="/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 11.25px;">卷积神经网络</a> <a href="/tags/%E5%8F%82%E6%95%B0%E4%BC%98%E5%8C%96/" style="font-size: 10px;">参数优化</a> <a href="/tags/%E5%90%8E%E7%AB%AF%E5%B7%A5%E7%A8%8B/" style="font-size: 10px;">后端工程</a> <a href="/tags/%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB/" style="font-size: 11.25px;">图像识别</a> <a href="/tags/%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" style="font-size: 10px;">基本操作</a> <a href="/tags/%E5%A4%9A%E6%A0%87%E7%AD%BE%E5%88%86%E7%B1%BB/" style="font-size: 10px;">多标签分类</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 12.5px;">大数据</a> <a href="/tags/%E5%AE%9E%E6%88%98%E6%8A%80%E5%B7%A7/" style="font-size: 10px;">实战技巧</a> <a href="/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/" style="font-size: 11.25px;">容器化</a> <a href="/tags/%E5%AF%86%E5%BA%A6%E8%81%9A%E7%B1%BB/" style="font-size: 10px;">密度聚类</a> <a href="/tags/%E5%B7%A5%E5%85%B7%E7%BB%8F%E9%AA%8C/" style="font-size: 11.25px;">工具经验</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80/" style="font-size: 12.5px;">工程基础</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E7%BB%8F%E9%AA%8C/" style="font-size: 13.75px;">工程经验</a> <a href="/tags/%E5%BC%82%E6%AD%A5/" style="font-size: 11.25px;">异步</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 12.5px;">性能优化</a> <a href="/tags/%E6%89%8B%E5%86%99%E7%AE%97%E6%B3%95/" style="font-size: 10px;">手写算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" style="font-size: 11.25px;">数据分析</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 11.25px;">数据可视化</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" style="font-size: 12.5px;">数据处理</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 10px;">数据库</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98/" style="font-size: 11.25px;">数据挖掘</a> <a href="/tags/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/" style="font-size: 11.25px;">日志管理</a> <a href="/tags/%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8/" style="font-size: 10px;">显卡驱动</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 20px;">机器学习</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E7%BB%9D%E5%AD%A6/" style="font-size: 11.25px;">架构绝学</a> <a href="/tags/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2/" style="font-size: 10px;">模型部署</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 17.5px;">深度学习</a> <a href="/tags/%E7%81%8C%E6%B0%B4/" style="font-size: 13.75px;">灌水</a> <a href="/tags/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/" style="font-size: 12.5px;">特征工程</a> <a href="/tags/%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9/" style="font-size: 10px;">特征选择</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" style="font-size: 10px;">环境搭建</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E9%97%AE%E9%A2%98/" style="font-size: 10px;">环境问题</a> <a href="/tags/%E7%A9%B7%E9%AC%BC%E7%A7%98%E7%B1%8D/" style="font-size: 10px;">穷鬼秘籍</a> <a href="/tags/%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/" style="font-size: 16.25px;">算法原理</a> <a href="/tags/%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0/" style="font-size: 10px;">算法实现</a> <a href="/tags/%E7%AE%97%E6%B3%95%E6%80%A7%E8%83%BD/" style="font-size: 10px;">算法性能</a> <a href="/tags/%E7%AE%97%E6%B3%95%E9%83%A8%E7%BD%B2/" style="font-size: 11.25px;">算法部署</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" style="font-size: 10px;">线性回归</a> <a href="/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95/" style="font-size: 10px;">经典算法</a> <a href="/tags/%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95/" style="font-size: 10px;">聚类算法</a> <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/" style="font-size: 10px;">自动化</a> <a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" style="font-size: 12.5px;">自然语言处理</a> <a href="/tags/%E8%AE%AD%E7%BB%83%E6%8A%80%E5%B7%A7/" style="font-size: 11.25px;">训练技巧</a> <a href="/tags/%E8%AE%BA%E6%96%87%E5%AE%9E%E7%8E%B0/" style="font-size: 10px;">论文实现</a> <a href="/tags/%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87/" style="font-size: 10px;">评估指标</a> <a href="/tags/%E8%AF%8D%E5%90%91%E9%87%8F%E5%8C%96/" style="font-size: 10px;">词向量化</a> <a href="/tags/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6/" style="font-size: 18.75px;">谐门武学</a> <a href="/tags/%E8%B0%90%E9%97%A8%E9%80%9F%E6%94%BB/" style="font-size: 11.25px;">谐门速攻</a> <a href="/tags/%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" style="font-size: 10px;">踩坑记录</a> <a href="/tags/%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/" style="font-size: 11.25px;">迁移学习</a> <a href="/tags/%E9%80%BB%E8%BE%91%E6%96%AF%E8%92%82%E5%9B%9E%E5%BD%92/" style="font-size: 10px;">逻辑斯蒂回归</a> <a href="/tags/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" style="font-size: 10px;">随机森林</a> <a href="/tags/%E9%9B%86%E6%88%90%E7%AE%97%E6%B3%95/" style="font-size: 10px;">集成算法</a> <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" style="font-size: 10px;">面向对象</a> <a href="/tags/%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/" style="font-size: 12.5px;">预训练模型</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/08/18/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/15/NLP%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E5%88%86%E4%BA%AB/">谐门武学-NLP预训练模型服务分享</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/13/%E9%9B%B6%E6%95%A3%E8%AE%B0%E5%BD%9520200613/">零散记录:20200613</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/25/%E9%9B%B6%E6%95%A3%E8%AE%B0%E5%BD%95:20200425/">零散记录:20200425</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/18/Python%E8%B0%83%E7%94%A8c%E4%BB%A3%E7%A0%81/">Python调用c代码</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 王大炮<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

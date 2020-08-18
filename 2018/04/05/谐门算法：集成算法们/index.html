@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>谐门算法：集成算法们 | 火力支援</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="谐门算法：集成算法们 耶稣问他叫什么，他说：“我们是群”，因为他们为数甚众  —路加福音 8:30  之前和一位师兄聊到对各种算法的看法，后来想了一想，感觉可以聊一聊一直陪伴我的集成算法们。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="谐门算法：集成算法们">
+<meta property="og:url" content="https://jonuknownothingsnow.github.io/2018/04/05/%E8%B0%90%E9%97%A8%E7%AE%97%E6%B3%95%EF%BC%9A%E9%9B%86%E6%88%90%E7%AE%97%E6%B3%95%E4%BB%AC/index.html">
+<meta property="og:site_name" content="火力支援">
+<meta property="og:description" content="谐门算法：集成算法们 耶稣问他叫什么，他说：“我们是群”，因为他们为数甚众  —路加福音 8:30  之前和一位师兄聊到对各种算法的看法，后来想了一想，感觉可以聊一聊一直陪伴我的集成算法们。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2018-04-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-08-18T06:31:54.714Z">
+<meta property="article:author" content="王大炮">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="算法原理">
+<meta property="article:tag" content="谐门武学">
+<meta property="article:tag" content="集成算法">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="火力支援" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.0.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">火力支援</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://jonuknownothingsnow.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-谐门算法：集成算法们" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/05/%E8%B0%90%E9%97%A8%E7%AE%97%E6%B3%95%EF%BC%9A%E9%9B%86%E6%88%90%E7%AE%97%E6%B3%95%E4%BB%AC/" class="article-date">
+  <time datetime="2018-04-04T16:00:00.000Z" itemprop="datePublished">2018-04-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95-%E6%A8%A1%E5%9E%8B/">算法/模型</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      谐门算法：集成算法们
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="谐门算法：集成算法们"><a href="#谐门算法：集成算法们" class="headerlink" title="谐门算法：集成算法们"></a>谐门算法：集成算法们</h1><blockquote>
+<p>耶稣问他叫什么，他说：“我们是群”，因为他们为数甚众  —路加福音 8:30</p>
+</blockquote>
+<p>之前和一位师兄聊到对各种算法的看法，后来想了一想，感觉可以聊一聊一直陪伴我的集成算法们。</p>
+<a id="more"></a>
+
+<h2 id="Boosting系"><a href="#Boosting系" class="headerlink" title="Boosting系"></a>Boosting系</h2><p>boosting系的算法基于一个简单的想法，如果我一开始的决策树有很大误差，那么我再训练一个能矫正误差的决策树，两个一起预测答案，会不会更准呢？如果是的话，那我训练100个是不是会准的不行呢？</p>
+<h3 id="AdaBoost"><a href="#AdaBoost" class="headerlink" title="AdaBoost"></a>AdaBoost</h3><p>AdaBoost是经典的boosting算法，一开始设计用来做二分类，在经过一些改造之后也可以解决其他类型的问题，它会调高之前模型分错类的样本的权重（或者重采样），训练新的模型，以使新的模型能矫正原先模型的错误。这样训练多个模型（基学习器）之后，使用他们一起去判断新的样本。</p>
+<h3 id="GBDT"><a href="#GBDT" class="headerlink" title="GBDT"></a>GBDT</h3><p>GBDT的全名是Gradient Boosting Decision Tree,强行翻成中文可以叫梯度增压决策树，这个名字简直太装逼太爽啦。</p>
+<p>GBDT实际上实力也很强，他的推导过程挺复杂的，它需要通过一系列的推导证明基学习器可以直接叠加。不过我们这种调包小子，暂时只要知道，直接对误差进行训练出来的学习器，可以加回到原来的学习器上就好了。</p>
+<p>假设我们做回归，先做了一个决策树A，它对每个值的预测都有一些误差。我们把这些一组误差作为新的目标，训练出一个新的模型决策树B,当然我们又可以把B的误差取出来，作为新的目标，一直这样下去，训练处一大堆学习器，每个学习器都是用来矫正上一个的。</p>
+<p>我们在把这些学习器叠在一起，他们的答案加在一起就是GBDT的结果了。</p>
+<p>虽然我用GBDT用的不多，但是由它衍生出来的一系列猛男都是我的好朋友。</p>
+<h3 id="XGB"><a href="#XGB" class="headerlink" title="XGB"></a>XGB</h3><p>xgboost！真是激动人心，这个模型是著名国人大佬陈天奇开发的，出道就斩获当年KDD的冠军，直到今天，XGB仍然是各大比赛里最常用的算法，是一个不讲道理的大杀器，在各种类型的问题上都有非常强大的表现。</p>
+<p>我感觉跟经典的GBDT和AdaBoost有区别，后两者给人的感觉就是基于一个想法而提出的实验机，本质上非常简单，但各人可以根据自己的理解进行改造以提高性能，适应业务。</p>
+<p>xgb就不太一样，xgb给人的感觉是各方面都经过详细的优化与调节，加了很多trick，是一部强大而复杂的比赛用实战机器。想要理解xgb并对它做出改造，需要有很强的功底才行。</p>
+<p>（像我这种就只能调调参了）</p>
+<p>目前理解到它对GBDT的强化点：</p>
+<ul>
+<li>基学习器可以使用广义线性模型</li>
+<li>带正则项，防过拟合</li>
+<li>吸收了随机森林的力量，划分时不使用全部特征（这个我们在随机森林里细讲）</li>
+</ul>
+<h3 id="LightGBM"><a href="#LightGBM" class="headerlink" title="LightGBM"></a>LightGBM</h3><p>LightGBM是微软的老哥们出品的强力算法，说实话，我一开始用xgb的时候并没有被震惊到，当时没调参的我感觉xgb和随机森林实力也差不多。但是当我第一次用LightGBM的时候，我是真的震惊到了。</p>
+<p>蛤？还有这么快的模型？实力还和XGB差不多？</p>
+<p>就我的体验来说，一般情况下LightGBM速度大概比XGB快十倍左右，对于所有在打比赛但还没有使用LightGBM的同学，我强力推荐大家去试一试，在快速验证想法的时候非常好用。</p>
+<p>LightGBM之所以这么快按文档里说的，我理解主要是把xgb用的pre-sorted算法换成了直方图算法。还记得我们在智障树补充一节里说到碰到连续变量的时候，要逐个去找切割点吗？直方图算法把连续变量分段，在每个分段之间找切割值，看上去好像只改了一点点，但是分段数远远小于变量数，况且切割这个动作又是做决策树的时候重复最多的动作，在这上面的优化反映在整体上就非常厉害了。</p>
+<h2 id="Bagging系"><a href="#Bagging系" class="headerlink" title="Bagging系"></a>Bagging系</h2><p>bagging系的算法基于另外一种思想，训练出大量独立且不同的模型，综合他们的结果来做最后的判断。这种情况向基学习器要足够强且不同，这样能使他们能够互相弥补不足之处。</p>
+<h3 id="Bagging"><a href="#Bagging" class="headerlink" title="Bagging"></a>Bagging</h3><p>Bagging模型实际上就是一堆决策树，我喜欢把他们形容成一帮智障儿童投票表决。它使用bootstrap从训练集中采样出新的样本，根据样本训练出一个决策树，然后不断重复这个过程，形成一大堆决策树。最后对结果进行投票表决（如果是回归就简单平均）。</p>
+<p>只要理解Bootstrap其实就理解了Bagging。</p>
+<p>bootstrap是指在m个样本中做有放回的抽样，一共做m次，这样就出来了一个和原来样本集一样大的采样样本。原样本中被采样到过的比例是$1-(1-1/m)^m$，m足够大时这个值接近0.632。剩下的没采样的部分还可以用来做验证之类的。</p>
+<p>Bagging利用bootstrap这种方法，相当于每一株决策树都采用了不同的样本，各自都会有不同，可以互相弥补，再让他们进行投票解决问题。</p>
+<h3 id="RandomForest随机森林"><a href="#RandomForest随机森林" class="headerlink" title="RandomForest随机森林"></a>RandomForest随机森林</h3><p>随机森林可以说是我第一个学到的机器学习算法，我连决策树都不知道是什么的时候，就开始用随机森林了，我对他有特别的亲切感。</p>
+<p>随机森林的原理很简单，在Bagging的基础上做了一个小改动，就是在决策树生成时寻找划分特征的这一步里，不在所有的特征里找，只在随机的一部分特征中选。</p>
+<p>如果特征一共有f个，这个一部分特征的数量f’一般默认是$f’=log_2f$,当然也可以改用根号f之类的，如果这里把f’设为f，那其实就是bagging了。</p>
+<h2 id="Stack"><a href="#Stack" class="headerlink" title="Stack"></a>Stack</h2><p>Stack模型融合其实感觉不能算一种算法，而是一种trick，用来在比赛后期把各种模型融合在一起，要用好stack，基本的思想和bagging是一样的，就是好而不同。</p>
+<p>stack的实现方式是这样的：</p>
+<p>假设你有一组模型m1、m2、m3，要把它们融合在一起。这时候我们可以拿过训练集train，把它分成5份（实际上可以根据需求分成更多也可以）分别是train1、train2到train5。我们首先用m1在train1~4上训练，训练完以后对train5进行预测，产生一组预测值，我们叫他ft1，再让模型对测试集test进行预测，得到tt1。然后再在train[1,2,3,5]上训练，对train4进行预测，得到ft2,对test进行预测得tt2。这样一直做，得到ft1~5和tt1~5。将ft1~5合在一起，我们得到一个长度等于len(train)的数组f1，对tt1~5求均值，得到长度为len(test)的数组t1。</p>
+<p>对每一个模型做这个过程，我们得到f1~3和目标作为新训练集new_train,t1~t3作为新测试集new_test,在new_train上训练一个线性模型（要用其他的也可以，只不过一般常用线性），基于new_test预测最终的结果。</p>
+<p>实际上stacking就是这么一个思路：就好像我们去给病人看病，三个医生给出了不同的意见，我们根据被每个医生的实力（通过他过去判断准不准来估计），给每个医生加上权重，再综合三个医生的意见给出结果。</p>
+<p>有的同学可能会问，能不能把原始的特征也加进来，去考虑每个医生在不同类型样本上准确率的差别，使得权重是动态的而非一个常数呢?</p>
+<p>这个思路我也在尝试，我感觉这个其实就类似于神经网络，神经网络里的训练不但训练每个神经元的参数，还训练什么时候激活这个神经元，什么时候关闭。就好像在某个病症上只听A医生的，在另一个病上听B医生的。如果刚才同学问的这个思路做stack，我感觉和神经网络的思路在根本上是一致的，可以探索一下</p>
+<h2 id="随便聊聊实用情况"><a href="#随便聊聊实用情况" class="headerlink" title="随便聊聊实用情况"></a>随便聊聊实用情况</h2><p>随便聊聊集成算法在比赛和业务中的感觉吧。</p>
+<h3 id="关于比赛"><a href="#关于比赛" class="headerlink" title="关于比赛"></a>关于比赛</h3><p>集成算法里我最早开始用的就是随机森林，当时什么都不懂，就想着调包，弄几个很猛的模型来快活一下。随机森林满足了我所有的想象：简单，强大，不可理喻。</p>
+<p>当时记得是一个回归的新手题目，我随便糊弄了下特征，连参数都没调，直接上了200树的随机森林，结果是直接带我飞到排行榜前十。</p>
+<p>当时我就觉得，这个东西太酷炫啦，我喜欢得要死。</p>
+<p>虽然现在看的话，随机森林比强度比不上xgb，比速度比不过lgb，但随机森林还是有它的优点的。它最大的优点就是（基本）不用调参，最大深度、最小叶子划分之类的调了效果也不好，基本上直接放个几百颗树莽出去就好了，效果还不差。大家都不调参的话，估计随机森林是最强的。</p>
+<p>不过怎么可能不调参呢，我们肯定是要调的嘛。在经过简单的调参以后，xgb的效果可以说突飞猛进，基本上如果没有应用什么对题目类型特化的算法，xgb的表现可以说是天花板了，LightGBM之类的虽然也很强，但一般都会差那么一点，有时候这么一点差距在比赛里就是好多名啊。</p>
+<p>感觉上的话xgb和随机森林差不多，都是重型武器，面对几乎所有类型的题目（图像识别之类的要用深度学习的不算），都有很好的表现，但是消耗（时间、内存）也大。</p>
+<p>lightGBM是我现在比赛里用的最多的模型，简单来说就是强而且快，具备和xgb一样的通杀所有题目的能力，而且速度快得飞起，用来验证想法、新特征之类的再好不过了。</p>
+<p>单个模型来说，这几个的表现是最好的，而且有很强的通用性。其他算法一般要看题目，分析题目的具体类型，数据的特征之类的，再去选择。为了最后stacking的效果，还是要尽可能多的训练几个不同类型的模型，以便互相补足。</p>
+<h3 id="关于业务"><a href="#关于业务" class="headerlink" title="关于业务"></a>关于业务</h3><p>其实业务的情况和比赛的情况还是有挺大区别的，之前也有和蚂蚁老哥还有其他公司的师兄聊过，比赛常客xgb，lgb，rf这种基本上业务里很少露面。GBDT还会出现一下，总体来说集成算法出现的都比较少。</p>
+<p>原因也有很多，一个是分析性的要求，使得很多黑箱算法都不好存活，做出一个预测的时候总会有人（有的时候很可能是老板)问:你为什么要这么预测呀。然后就要解释，你不能跟人家说“因为我这个算法算出来就是这样的”。</p>
+<p>其实解释性、分析性也不止是面对老板的时候要用，它本身就是很重要的，我们通过挖掘数据一个是做应用，另一个重要的就是做分析，做应用可能不太需要解释，但是做分析的时候本质就是解释。我们要去解释过去的数据，告诉大家它为什么是这样的，未来我们应该怎么做。</p>
+<p>数据光挖掘出来还不行，还要想办法转化到人的脑子里，应为很多东西是要靠人去实现的，人才是终端。</p>
+<p>另外一个就是，模型的分析性解释性其实对模型的及时纠正也很有用处，很久以前脑子搭牢想用随机森林做一个时序数据的预测，用最后那个星期做测试，刚做出来感觉还可以，MSPE还不到10%。结果后来才发现它的预测就是拿上周的数据改了改，对未来所有周的预测都是一样的，出了一周以后误差就爆炸。如果我们一开始就知道它的预测原理的话，就不会被骗那么久了。</p>
+<p>像是刚才说的时序分析，还是传统的统计模型好用，ARMA这种，解释性好，模型又简单。</p>
+<p>所以在业务这块逻辑斯蒂回归这种可以说是称霸一方：本质是广义线性模型，解释性好，简单又不占内存，训练好之后部署就是一行代码的事情，实在爽得不行。</p>
+<p>集成算法在业务这边的话可能分类上还是强的，但是到分析性比较强的业务，比如时序分析回归这种，就不是很行。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>聊了这么多是时候回去做事了，这次虽然时间比较紧，不过说前五百就能进复赛，还是可以搏一搏的。最后估计会有五千多只队伍，我们要冲到8%左右就可以进复赛了，努力努力。</p>
+<blockquote>
+<p>他们就央求耶稣，不要赶他们进无底坑 —路加福音8:31</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://jonuknownothingsnow.github.io/2018/04/05/%E8%B0%90%E9%97%A8%E7%AE%97%E6%B3%95%EF%BC%9A%E9%9B%86%E6%88%90%E7%AE%97%E6%B3%95%E4%BB%AC/" data-id="ckdzkkn6i008jxg5sfy2paekz" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/" rel="tag">算法原理</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6/" rel="tag">谐门武学</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9B%86%E6%88%90%E7%AE%97%E6%B3%95/" rel="tag">集成算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/05/01/ROC/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          ROC与二分类模型评估
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/03/25/%E7%8B%82%E5%90%B9Colaboratory/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">狂吹Colaboratory</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%A8%E6%A0%88%E6%BA%A2%E5%87%BA%EF%BC%88%E7%AC%91%EF%BC%89/">全栈溢出（笑）</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/">实用技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B7%A5%E5%85%B7%E7%BB%8F%E9%AA%8C/">工具经验</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E4%B8%8E%E7%AE%97%E6%B3%95/">数据与算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">数据分析</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E8%B5%9B%E4%BA%8B/">数据赛事</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95-%E6%A8%A1%E5%9E%8B/">算法/模型</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95%E6%A8%A1%E5%9E%8B/">算法模型</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6/">谐门武学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%B2%E5%9D%91%E6%8C%87%E5%8D%97/">防坑指南</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9B%B6%E6%95%A3%E8%AE%B0%E5%BD%95/">零散记录</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Albert/" rel="tag">Albert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Attention/" rel="tag">Attention</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AutoML/" rel="tag">AutoML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BERT/" rel="tag">BERT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BI%E7%AB%99%E7%82%B9/" rel="tag">BI站点</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BI%E7%BB%9D%E5%AD%A6/" rel="tag">BI绝学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bert/" rel="tag">Bert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bokeh/" rel="tag">Bokeh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Colaboratory/" rel="tag">Colaboratory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/" rel="tag">ELK</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Flask/" rel="tag">Flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GPU/" rel="tag">GPU</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hive/" rel="tag">Hive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jupyter-Notebook/" rel="tag">Jupyter Notebook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JupyterHub/" rel="tag">JupyterHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keras/" rel="tag">Keras</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kubernetes/" rel="tag">Kubernetes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LSTM/" rel="tag">LSTM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Metric/" rel="tag">Metric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NLP/" rel="tag">NLP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Odin/" rel="tag">Odin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pytorch/" rel="tag">Pytorch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/R/" rel="tag">R</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ray/" rel="tag">Ray</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Roberta/" rel="tag">Roberta</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scikit-learn/" rel="tag">Scikit-learn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Supervisor/" rel="tag">Supervisor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tensorflow/" rel="tag">Tensorflow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Transformer/" rel="tag">Transformer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cnn/" rel="tag">cnn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gensim/" rel="tag">gensim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tensorflow/" rel="tag">tensorflow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E6%A1%86%E6%9E%B6/" rel="tag">web框架</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%9A%E5%86%85%E6%96%B0%E9%97%BB/" rel="tag">业内新闻</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E5%88%86%E7%B1%BB/" rel="tag">二分类</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag">云服务器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0/" rel="tag">代码实现</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/" rel="tag">优化方法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%A0%E7%BB%9F%E7%AE%97%E6%B3%95/" rel="tag">传统算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%A8%E6%A1%9F%E6%BA%A2%E5%87%BA/" rel="tag">全桟溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%B3%E7%AD%96%E6%A0%91/" rel="tag">决策树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/" rel="tag">分布式计算</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E9%A6%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">前馈神经网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%AA%E6%9E%9D/" rel="tag">剪枝</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%9A%E5%AE%A2/" rel="tag">博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">卷积神经网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%82%E6%95%B0%E4%BC%98%E5%8C%96/" rel="tag">参数优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF%E5%B7%A5%E7%A8%8B/" rel="tag">后端工程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB/" rel="tag">图像识别</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" rel="tag">基本操作</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E6%A0%87%E7%AD%BE%E5%88%86%E7%B1%BB/" rel="tag">多标签分类</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9E%E6%88%98%E6%8A%80%E5%B7%A7/" rel="tag">实战技巧</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/" rel="tag">容器化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%86%E5%BA%A6%E8%81%9A%E7%B1%BB/" rel="tag">密度聚类</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7%E7%BB%8F%E9%AA%8C/" rel="tag">工具经验</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80/" rel="tag">工程基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E7%BB%8F%E9%AA%8C/" rel="tag">工程经验</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E6%AD%A5/" rel="tag">异步</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%89%8B%E5%86%99%E7%AE%97%E6%B3%95/" rel="tag">手写算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" rel="tag">数据分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">数据可视化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" rel="tag">数据处理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98/" rel="tag">数据挖掘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/" rel="tag">日志管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8/" rel="tag">显卡驱动</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9E%B6%E6%9E%84%E7%BB%9D%E5%AD%A6/" rel="tag">架构绝学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2/" rel="tag">模型部署</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag">深度学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%81%8C%E6%B0%B4/" rel="tag">灌水</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/" rel="tag">特征工程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9/" rel="tag">特征选择</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" rel="tag">环境搭建</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E9%97%AE%E9%A2%98/" rel="tag">环境问题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A9%B7%E9%AC%BC%E7%A7%98%E7%B1%8D/" rel="tag">穷鬼秘籍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/" rel="tag">算法原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0/" rel="tag">算法实现</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E6%80%A7%E8%83%BD/" rel="tag">算法性能</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E9%83%A8%E7%BD%B2/" rel="tag">算法部署</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" rel="tag">线性回归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95/" rel="tag">经典算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95/" rel="tag">聚类算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/" rel="tag">自动化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" rel="tag">自然语言处理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%AD%E7%BB%83%E6%8A%80%E5%B7%A7/" rel="tag">训练技巧</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BA%E6%96%87%E5%AE%9E%E7%8E%B0/" rel="tag">论文实现</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87/" rel="tag">评估指标</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%8D%E5%90%91%E9%87%8F%E5%8C%96/" rel="tag">词向量化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6/" rel="tag">谐门武学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B0%90%E9%97%A8%E9%80%9F%E6%94%BB/" rel="tag">谐门速攻</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" rel="tag">踩坑记录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/" rel="tag">迁移学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%80%BB%E8%BE%91%E6%96%AF%E8%92%82%E5%9B%9E%E5%BD%92/" rel="tag">逻辑斯蒂回归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" rel="tag">随机森林</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E6%88%90%E7%AE%97%E6%B3%95/" rel="tag">集成算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="tag">面向对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/" rel="tag">预训练模型</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Albert/" style="font-size: 10px;">Albert</a> <a href="/tags/Attention/" style="font-size: 11.25px;">Attention</a> <a href="/tags/AutoML/" style="font-size: 10px;">AutoML</a> <a href="/tags/BERT/" style="font-size: 10px;">BERT</a> <a href="/tags/BI%E7%AB%99%E7%82%B9/" style="font-size: 11.25px;">BI站点</a> <a href="/tags/BI%E7%BB%9D%E5%AD%A6/" style="font-size: 10px;">BI绝学</a> <a href="/tags/Bert/" style="font-size: 10px;">Bert</a> <a href="/tags/Bokeh/" style="font-size: 10px;">Bokeh</a> <a href="/tags/Colaboratory/" style="font-size: 10px;">Colaboratory</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/ELK/" style="font-size: 10px;">ELK</a> <a href="/tags/Flask/" style="font-size: 10px;">Flask</a> <a href="/tags/GPU/" style="font-size: 10px;">GPU</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Jupyter-Notebook/" style="font-size: 10px;">Jupyter Notebook</a> <a href="/tags/JupyterHub/" style="font-size: 11.25px;">JupyterHub</a> <a href="/tags/Keras/" style="font-size: 12.5px;">Keras</a> <a href="/tags/Kubernetes/" style="font-size: 11.25px;">Kubernetes</a> <a href="/tags/LSTM/" style="font-size: 10px;">LSTM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Metric/" style="font-size: 10px;">Metric</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/NLP/" style="font-size: 15px;">NLP</a> <a href="/tags/Odin/" style="font-size: 11.25px;">Odin</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Pytorch/" style="font-size: 10px;">Pytorch</a> <a href="/tags/R/" style="font-size: 10px;">R</a> <a href="/tags/Ray/" style="font-size: 10px;">Ray</a> <a href="/tags/Roberta/" style="font-size: 10px;">Roberta</a> <a href="/tags/Scikit-learn/" style="font-size: 10px;">Scikit-learn</a> <a href="/tags/Supervisor/" style="font-size: 10px;">Supervisor</a> <a href="/tags/Tensorflow/" style="font-size: 12.5px;">Tensorflow</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/cnn/" style="font-size: 10px;">cnn</a> <a href="/tags/docker/" style="font-size: 12.5px;">docker</a> <a href="/tags/gensim/" style="font-size: 10px;">gensim</a> <a href="/tags/tensorflow/" style="font-size: 10px;">tensorflow</a> <a href="/tags/web%E6%A1%86%E6%9E%B6/" style="font-size: 10px;">web框架</a> <a href="/tags/%E4%B8%9A%E5%86%85%E6%96%B0%E9%97%BB/" style="font-size: 11.25px;">业内新闻</a> <a href="/tags/%E4%BA%8C%E5%88%86%E7%B1%BB/" style="font-size: 10px;">二分类</a> <a href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10px;">云服务器</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0/" style="font-size: 11.25px;">代码实现</a> <a href="/tags/%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/" style="font-size: 10px;">优化方法</a> <a href="/tags/%E4%BC%A0%E7%BB%9F%E7%AE%97%E6%B3%95/" style="font-size: 11.25px;">传统算法</a> <a href="/tags/%E5%85%A8%E6%A1%9F%E6%BA%A2%E5%87%BA/" style="font-size: 10px;">全桟溢出</a> <a href="/tags/%E5%86%B3%E7%AD%96%E6%A0%91/" style="font-size: 11.25px;">决策树</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/" style="font-size: 10px;">分布式计算</a> <a href="/tags/%E5%89%8D%E9%A6%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 10px;">前馈神经网络</a> <a href="/tags/%E5%89%AA%E6%9E%9D/" style="font-size: 10px;">剪枝</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 10px;">博客</a> <a href="/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 11.25px;">卷积神经网络</a> <a href="/tags/%E5%8F%82%E6%95%B0%E4%BC%98%E5%8C%96/" style="font-size: 10px;">参数优化</a> <a href="/tags/%E5%90%8E%E7%AB%AF%E5%B7%A5%E7%A8%8B/" style="font-size: 10px;">后端工程</a> <a href="/tags/%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB/" style="font-size: 11.25px;">图像识别</a> <a href="/tags/%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" style="font-size: 10px;">基本操作</a> <a href="/tags/%E5%A4%9A%E6%A0%87%E7%AD%BE%E5%88%86%E7%B1%BB/" style="font-size: 10px;">多标签分类</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 12.5px;">大数据</a> <a href="/tags/%E5%AE%9E%E6%88%98%E6%8A%80%E5%B7%A7/" style="font-size: 10px;">实战技巧</a> <a href="/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/" style="font-size: 11.25px;">容器化</a> <a href="/tags/%E5%AF%86%E5%BA%A6%E8%81%9A%E7%B1%BB/" style="font-size: 10px;">密度聚类</a> <a href="/tags/%E5%B7%A5%E5%85%B7%E7%BB%8F%E9%AA%8C/" style="font-size: 11.25px;">工具经验</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80/" style="font-size: 12.5px;">工程基础</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E7%BB%8F%E9%AA%8C/" style="font-size: 13.75px;">工程经验</a> <a href="/tags/%E5%BC%82%E6%AD%A5/" style="font-size: 11.25px;">异步</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 12.5px;">性能优化</a> <a href="/tags/%E6%89%8B%E5%86%99%E7%AE%97%E6%B3%95/" style="font-size: 10px;">手写算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" style="font-size: 11.25px;">数据分析</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 11.25px;">数据可视化</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" style="font-size: 12.5px;">数据处理</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 10px;">数据库</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98/" style="font-size: 11.25px;">数据挖掘</a> <a href="/tags/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/" style="font-size: 11.25px;">日志管理</a> <a href="/tags/%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8/" style="font-size: 10px;">显卡驱动</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 20px;">机器学习</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E7%BB%9D%E5%AD%A6/" style="font-size: 11.25px;">架构绝学</a> <a href="/tags/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2/" style="font-size: 10px;">模型部署</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 17.5px;">深度学习</a> <a href="/tags/%E7%81%8C%E6%B0%B4/" style="font-size: 13.75px;">灌水</a> <a href="/tags/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/" style="font-size: 12.5px;">特征工程</a> <a href="/tags/%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9/" style="font-size: 10px;">特征选择</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" style="font-size: 10px;">环境搭建</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E9%97%AE%E9%A2%98/" style="font-size: 10px;">环境问题</a> <a href="/tags/%E7%A9%B7%E9%AC%BC%E7%A7%98%E7%B1%8D/" style="font-size: 10px;">穷鬼秘籍</a> <a href="/tags/%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/" style="font-size: 16.25px;">算法原理</a> <a href="/tags/%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0/" style="font-size: 10px;">算法实现</a> <a href="/tags/%E7%AE%97%E6%B3%95%E6%80%A7%E8%83%BD/" style="font-size: 10px;">算法性能</a> <a href="/tags/%E7%AE%97%E6%B3%95%E9%83%A8%E7%BD%B2/" style="font-size: 11.25px;">算法部署</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" style="font-size: 10px;">线性回归</a> <a href="/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95/" style="font-size: 10px;">经典算法</a> <a href="/tags/%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95/" style="font-size: 10px;">聚类算法</a> <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/" style="font-size: 10px;">自动化</a> <a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" style="font-size: 12.5px;">自然语言处理</a> <a href="/tags/%E8%AE%AD%E7%BB%83%E6%8A%80%E5%B7%A7/" style="font-size: 11.25px;">训练技巧</a> <a href="/tags/%E8%AE%BA%E6%96%87%E5%AE%9E%E7%8E%B0/" style="font-size: 10px;">论文实现</a> <a href="/tags/%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87/" style="font-size: 10px;">评估指标</a> <a href="/tags/%E8%AF%8D%E5%90%91%E9%87%8F%E5%8C%96/" style="font-size: 10px;">词向量化</a> <a href="/tags/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6/" style="font-size: 18.75px;">谐门武学</a> <a href="/tags/%E8%B0%90%E9%97%A8%E9%80%9F%E6%94%BB/" style="font-size: 11.25px;">谐门速攻</a> <a href="/tags/%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" style="font-size: 10px;">踩坑记录</a> <a href="/tags/%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/" style="font-size: 11.25px;">迁移学习</a> <a href="/tags/%E9%80%BB%E8%BE%91%E6%96%AF%E8%92%82%E5%9B%9E%E5%BD%92/" style="font-size: 10px;">逻辑斯蒂回归</a> <a href="/tags/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" style="font-size: 10px;">随机森林</a> <a href="/tags/%E9%9B%86%E6%88%90%E7%AE%97%E6%B3%95/" style="font-size: 10px;">集成算法</a> <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" style="font-size: 10px;">面向对象</a> <a href="/tags/%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/" style="font-size: 12.5px;">预训练模型</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/08/18/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/15/NLP%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E5%88%86%E4%BA%AB/">谐门武学-NLP预训练模型服务分享</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/13/%E9%9B%B6%E6%95%A3%E8%AE%B0%E5%BD%9520200613/">零散记录:20200613</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/25/%E9%9B%B6%E6%95%A3%E8%AE%B0%E5%BD%95:20200425/">零散记录:20200425</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/18/Python%E8%B0%83%E7%94%A8c%E4%BB%A3%E7%A0%81/">Python调用c代码</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 王大炮<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

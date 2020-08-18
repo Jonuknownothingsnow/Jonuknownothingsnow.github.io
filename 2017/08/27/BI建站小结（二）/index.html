@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>BI建站小结（二） | 火力支援</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="期待已久的服务器终于批下来啦，本来预想是1核1G，到手竟然发现是4核8G，这回真的上天啦！周三下午拿到服务器，当天晚上我就把BI项目迁上去了。这两天把各种环境配置了一下，由于这回是要真的上线了，所以项目的许多东西都要改，比如本来用pickle临时储存数据，现在要正式上线就还是得用数据库。 一番折腾终于弄好了，来总结一下吧。这次主要讲下数据处理、服务器部署方面的操作，涉及到数据可视化等方面的基本没有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BI建站小结（二）">
+<meta property="og:url" content="https://jonuknownothingsnow.github.io/2017/08/27/BI%E5%BB%BA%E7%AB%99%E5%B0%8F%E7%BB%93%EF%BC%88%E4%BA%8C%EF%BC%89/index.html">
+<meta property="og:site_name" content="火力支援">
+<meta property="og:description" content="期待已久的服务器终于批下来啦，本来预想是1核1G，到手竟然发现是4核8G，这回真的上天啦！周三下午拿到服务器，当天晚上我就把BI项目迁上去了。这两天把各种环境配置了一下，由于这回是要真的上线了，所以项目的许多东西都要改，比如本来用pickle临时储存数据，现在要正式上线就还是得用数据库。 一番折腾终于弄好了，来总结一下吧。这次主要讲下数据处理、服务器部署方面的操作，涉及到数据可视化等方面的基本没有">
+<meta property="og:locale">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/08/27/59a2870e4927d.jpeg">
+<meta property="article:published_time" content="2017-08-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-08-18T06:31:54.672Z">
+<meta property="article:author" content="王大炮">
+<meta property="article:tag" content="BI站点">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="MongoDB">
+<meta property="article:tag" content="Supervisor">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ooo.0o0.ooo/2017/08/27/59a2870e4927d.jpeg">
+  
+    <link rel="alternate" href="/atom.xml" title="火力支援" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.0.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">火力支援</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://jonuknownothingsnow.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-BI建站小结（二）" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/08/27/BI%E5%BB%BA%E7%AB%99%E5%B0%8F%E7%BB%93%EF%BC%88%E4%BA%8C%EF%BC%89/" class="article-date">
+  <time datetime="2017-08-26T16:00:00.000Z" itemprop="datePublished">2017-08-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%85%A8%E6%A0%88%E6%BA%A2%E5%87%BA%EF%BC%88%E7%AC%91%EF%BC%89/">全栈溢出（笑）</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      BI建站小结（二）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>期待已久的服务器终于批下来啦，本来预想是1核1G，到手竟然发现是4核8G，这回真的上天啦！周三下午拿到服务器，当天晚上我就把BI项目迁上去了。这两天把各种环境配置了一下，由于这回是要真的上线了，所以项目的许多东西都要改，比如本来用pickle临时储存数据，现在要正式上线就还是得用数据库。</p>
+<p>一番折腾终于弄好了，来总结一下吧。这次主要讲下数据处理、服务器部署方面的操作，涉及到数据可视化等方面的基本没有什么改动，还是和上次<a href="https://jonuknownothingsnow.github.io/2017/08/14/2017-08-14-BI%E5%BB%BA%E7%AB%99%E5%B0%8F%E7%BB%93/">BI建站小结</a>中基本一致的。 </p>
+<a id="more"></a>
+
+<h1 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h1><p>总地来看这个小项目可以分成服务端和数据端。数据端首先是通过celery beat的定时任务，定时使用SSHTunnel与跳板机链接，用pymysql从公司的线上数据库里获取数据，处理后存到本地的mysql数据库中。根据业务的需要进行对数据进行处理，以字典的形式存到本地的mongodb当中。</p>
+<p>服务端是nginx+gunicorn+flask，flask直接调用mongodb当中储存的数据，除了部分必要的基础操作，不对数据进行更多的处理，原则上不直接对除mongodb以外的数据库进行调用。</p>
+<p>服务器上的celery、mongodb、web等应用，都通过supervisor来维持监控。</p>
+<p><img src="https://ooo.0o0.ooo/2017/08/27/59a2870e4927d.jpeg" alt="WechatIMG802.jpeg"></p>
+<p><em>白板绘有点难看，大家见谅，下次用数位板画</em></p>
+<p>在将demo搬上服务器后，本来一些临时展示用的组件都需要拆掉，换成正式的版本，接下来我们一步步的讲下替换的过程。环境配置方面的问题太过细碎我们就略过不讲了。</p>
+<p>#数据获取</p>
+<p>正式上线需要完成的第一个新功能就是从公司数据服务器定时更新数据。而要完成这个功能的第一步就是连接到公司的数据库，这里公司内网也是无法直接连接该数据库的，需要使用跳板机，这里就针对跳板机的使用做一些说明。</p>
+<h2 id="SSHTunnel-Pymsql-通过跳板机获取数据"><a href="#SSHTunnel-Pymsql-通过跳板机获取数据" class="headerlink" title="SSHTunnel+Pymsql 通过跳板机获取数据"></a>SSHTunnel+Pymsql 通过跳板机获取数据</h2><p>我选择使用SSHTunnel连接跳板机，再通过pymysql从mysql数据库里获取数据。大致代码如下。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"><span class="keyword">import</span> paramiko</span><br><span class="line"><span class="keyword">from</span> sshtunnel <span class="keyword">import</span> SSHTunnelForwarder</span><br><span class="line"></span><br><span class="line"><span class="comment">#建立SSHTunnel</span></span><br><span class="line">server = SSHTunnelForwarder(</span><br><span class="line">    (<span class="string">&#x27;db.host.com&#x27;</span>,port),<span class="comment">#db.host.com为跳板机域名/ip，port为接口</span></span><br><span class="line">    ssh_username=<span class="string">&quot;username&quot;</span>,</span><br><span class="line">    ssh_password=<span class="string">&quot;password&quot;</span>,</span><br><span class="line">    remote_bind_address=(<span class="string">&#x27;db.target.com&#x27;</span>, db_port)<span class="comment">#db.host.com为数据库服务器域名/ip，port为接口，mysql一般是3306</span></span><br><span class="line">)</span><br><span class="line">server.start()<span class="comment">#需要先启动通道</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#建立与数据库的链接就像是本地数据库一样，区别在于把host换成了server.local_bind_host，port换成了port=server.local_bind_port</span></span><br><span class="line">conn = pymysql.Connect(host=server.local_bind_host,port=server.local_bind_port,user=<span class="string">&quot;user&quot;</span>,password=<span class="string">&quot;password&quot;</span>,charset=<span class="string">&#x27;utf8&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#使用conn获取数据</span></span><br><span class="line">cur = conn.cursor()</span><br><span class="line">cur.execute(<span class="string">&quot;balabala&quot;</span>)</span><br><span class="line">data = cur.fetchall()</span><br><span class="line"></span><br><span class="line"><span class="comment">#用完记得关闭</span></span><br><span class="line">conn.close()</span><br><span class="line">server.close()</span><br><span class="line"></span><br><span class="line"><span class="comment">#再用可以接着打开……</span></span><br><span class="line">server.start()</span><br></pre></td></tr></table></figure>
+
+<p>基本上使用sshtunnel连接跳板机来获取数据就是这样一个流程了，可以使用with语句，或者包装成简便的方法等，这个具体的处理方式是很多的。</p>
+<h2 id="转存到本地数据库"><a href="#转存到本地数据库" class="headerlink" title="转存到本地数据库"></a>转存到本地数据库</h2><p>之前在本地数据库的方案上我还是有几种考虑的，当时有考虑过mysql、mariadb和postgreSQL，后来因为服务器是centos7，自带的默认服务器就是mariadb，所以还是服软了，就用mariadb吧，反正能兼容mysql，就当mysql用呗。</p>
+<p>事实证明对于我这样的菜鸡来说确实和mysql没什么区别，反正都能用pymysql愉快操作。</p>
+<p>由于pymysql是直接写sql语句的，转存的过程其实也就是先建个表，再拼接下字符串把数据存进去，考虑到每天数据就更新一次，而且旧数据是可能被改动的，出于偷懒起见我就直接清空整个表，再全部塞进去好了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#大概这样操作……</span></span><br><span class="line">cur.execute(<span class="string">f&quot;Truncate Table <span class="subst">&#123;tablename&#125;</span>&quot;</span>)</span><br><span class="line">cur.execute(<span class="string">f&quot;Insert into <span class="subst">&#123;tablename&#125;</span> Values<span class="subst">&#123;insert&#125;</span> &quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#拼接字符串的时候注意一下，Values后面跟的插入内容的格式是这样的：</span></span><br><span class="line">(<span class="string">&quot;a&quot;</span>,<span class="number">1</span>,<span class="number">2</span>),(<span class="string">&quot;b&quot;</span>,<span class="number">3</span>,<span class="number">4</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#而不是从mysql里取出来的时候如下这种格式：</span></span><br><span class="line">((<span class="string">&quot;a&quot;</span>,<span class="number">1</span>,<span class="number">2</span>),(<span class="string">&quot;b&quot;</span>,<span class="number">3</span>,<span class="number">4</span>))</span><br></pre></td></tr></table></figure>
+
+<p>mysql还有一个在开始容易踩的坑是utf-8字符设置的问题，这个之后单独开一篇讲好了。</p>
+<h2 id="反思"><a href="#反思" class="headerlink" title="反思"></a>反思</h2><p>我们这样做获取与转存的有利之处是明显的：不需要频繁访问线上数据库，避免对其他业务造成影响。本地服务器储存原始数据，支持后续的多种分析处理。</p>
+<p>不利之处主要在于，无法满足一些即时演算的要求，但是我们这个BI系统在未来可见的时间里，都不会有即时演算的需求。就算到时候有了，我们再配合celery做异步的数据获取与处理，应该也能满足需要。</p>
+<h1 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h1><p>上一节中保存在本地mysql数据库的实际上是远程数据库的一个镜像，是一个原始的业务数据，还需要经过许多处理才能在网页上展现，这些操作在demo中我们都写在了视图当中，这当然是不可取的，在性能上会有很大影响。现在我们要把这处理的功能从视图中剥离出来。</p>
+<p>这里分为两种数据处理，一种是预先处理好的，对于一些数据量不大的需求。我们在半夜获取的数据的同时就开始把需要做的处理工作完成，将结果储存，这样在访问的时候只需要读取预先计算好的结果。</p>
+<p>另一种是需要即时进行的数据处理，这种可能由于数据量过大，而又不一定每个结果都会被访问，例如针对每个用户的数据指标，难以预先进行计算，或者预先进行计算的性价比较低。这时候只能先写好方法，视图尽可能简洁地调用某几个方法的结果。</p>
+<h2 id="使用MongoDB保存预处理数据"><a href="#使用MongoDB保存预处理数据" class="headerlink" title="使用MongoDB保存预处理数据"></a>使用MongoDB保存预处理数据</h2><p>对于预处理好的数据，我选择使用MongoDB进行保存。我们目前这个项目体量小，需要保存的主要是一些前端页面的内容，在demo阶段的时候用的就是pickle储存的字典进行保存。这正是MongoDB这类Key-Value数据库的强项所在，由于MongoDB可以直接保存字典，能在最小程度上减少对原本代码的改动。</p>
+<p>假设我们已经装好了MongoDB和pymongo，我们可以这样操作：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</span><br><span class="line"></span><br><span class="line"><span class="comment">#链接数据库，是不是感觉和pymysql还挺像的</span></span><br><span class="line">client  = MongoClient(<span class="string">&#x27;localhost&#x27;</span>, <span class="number">27017</span>)</span><br><span class="line">db = client.test_db</span><br><span class="line"></span><br><span class="line"><span class="comment">#随便写个数据</span></span><br><span class="line">test = &#123;<span class="string">&quot;a&quot;</span>:<span class="number">1</span>,<span class="string">&quot;b&quot;</span>:&#123;<span class="string">&quot;c&quot;</span>:<span class="number">2</span>,<span class="string">&quot;d&quot;</span>:<span class="number">3</span>&#125;,<span class="string">&quot;li&quot;</span>:[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]&#125;<span class="comment">#列表、字典、嵌套，统统没在怕的</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#就这样方便的插入进去</span></span><br><span class="line">db.test_table.insert_one(test)</span><br><span class="line"><span class="comment">#test_table就好像mysql里的一张表，但棒棒的是我们不需要预先去定义这个表</span></span><br><span class="line"><span class="comment">#如果它不存在，会被自动生成</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#其实也可以这样写，通过result.inserted_id可以获得这次插入文档自动生成的id</span></span><br><span class="line">result = db.test_table.insert_one(test)</span><br><span class="line">result.inserted_id</span><br><span class="line"></span><br><span class="line"><span class="comment">#如何查询呢？假如我想找一个&quot;a&quot;=1的对象</span></span><br><span class="line">db.test.find_one(&#123;<span class="string">&quot;a&quot;</span>:<span class="number">1</span>&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">#当然也可以使用find，这样会找到所有满足条件的对象</span></span><br><span class="line">db.test.find(&#123;<span class="string">&quot;a&quot;</span>:<span class="number">1</span>&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">#获取的数据还是那个字典，还是一样的味道！</span></span><br><span class="line">data = db.test.find_one(&#123;<span class="string">&quot;a&quot;</span>:<span class="number">1</span>&#125;)</span><br><span class="line">data[<span class="string">&quot;li&quot;</span>][<span class="number">1</span>]<span class="comment">#太快活啦~</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#我们不需要手动去关闭pymongo的连接，pymongo有个连接池，在python收垃圾的时候会自动关闭连接。</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="保存读取可视化对象"><a href="#保存读取可视化对象" class="headerlink" title="保存读取可视化对象"></a>保存读取可视化对象</h2><p>还记不记得我们在<a href="https://jonuknownothingsnow.github.io/2017/08/20/2017-08-20-Flask+Bokeh%E5%AE%9E%E7%8E%B0%E7%BD%91%E9%A1%B5%E5%B1%95%E7%A4%BA%E5%8F%AF%E8%A7%86%E5%8C%96%E6%95%B0%E6%8D%AE/">使用Bokeh进行网页上的可视化数据展示</a>中提到，bokeh绘制的图形可以被拆成一个script对象和一个div对象，这两个对象可以被flask传给前端的jinja模板进行渲染。</p>
+<p>大家有没有想过这两个对象本质上是什么？</p>
+<p>没有错，就是字符串，虽然说是一段代码，但本质上还是字符串。于是我们就可以：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#…………一些非常厉害的这里写不下的操作</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#把bokeh的图形拆成script与div</span></span><br><span class="line">script,div = components(plot)</span><br><span class="line"></span><br><span class="line"><span class="comment">#看看它们是什么</span></span><br><span class="line">print(script)</span><br><span class="line">print(div)</span><br><span class="line"></span><br><span class="line"><span class="comment">#把它们塞到(层层嵌套的)dict里</span></span><br><span class="line">data = &#123;&#125;</span><br><span class="line">data[<span class="string">&quot;today&quot;</span>] = str(datetime.date.today())</span><br><span class="line">data[<span class="string">&quot;numbers_dict&quot;</span>] = numbers_dict</span><br><span class="line">data[<span class="string">&quot;plot&quot;</span>] = &#123;<span class="string">&quot;script&quot;</span>:script,<span class="string">&quot;div&quot;</span>:div&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">#存到MongoDB里去~</span></span><br><span class="line">client  = MongoClient(<span class="string">&#x27;localhost&#x27;</span>, <span class="number">27017</span>)</span><br><span class="line">db = client.daily_db</span><br><span class="line">db.daily_report.insert_one(data)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#…………在flask的视图里</span></span><br><span class="line"><span class="meta">@app.route(&quot;/plot&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">plot</span>():</span>    </span><br><span class="line">    <span class="comment">#假如我要2017年8月22号的数据</span></span><br><span class="line">    client  = MongoClient(<span class="string">&#x27;localhost&#x27;</span>, <span class="number">27017</span>)</span><br><span class="line">    db = client.daily_db</span><br><span class="line">    data = db.daily_report.find_one(&#123;<span class="string">&quot;today&quot;</span>:<span class="string">&quot;2017-08-22&quot;</span>&#125;)</span><br><span class="line">    today = data[<span class="string">&quot;today&quot;</span>]</span><br><span class="line">    script = data[<span class="string">&quot;plot&quot;</span>][<span class="string">&quot;script&quot;</span>]</span><br><span class="line">    div = data[<span class="string">&quot;plot&quot;</span>][<span class="string">&quot;div&quot;</span>]</span><br><span class="line">    <span class="comment">#传给template</span></span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">&quot;dailyreport.html&quot;</span>,today=today,script=scrpit,div=div)</span><br></pre></td></tr></table></figure>
+
+<p>既不用即时画图，又不用保存图片文件，只用保存两段字符串就好了，多么便捷！</p>
+<h1 id="使用Supervisor"><a href="#使用Supervisor" class="headerlink" title="使用Supervisor"></a>使用Supervisor</h1><p>最后请允许我非常大力地向各位推荐Supervisor，这个玩意实在太好用了！</p>
+<p>唯一的缺点可能是只支持python2，不过没关系，我们大可以用python2来运行supervisor，让他去监视一干python3进程。</p>
+<p>别说python3了，只要是进程都可以监控啦。</p>
+<p>首先当然还是</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">注意装在python2上</span></span><br><span class="line">pip install supervisor</span><br></pre></td></tr></table></figure>
+
+<p>装好了之后</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">需要root权限，会生成一个supervisord.conf文件，实际上这个文件本身就附带了详实的说明</span></span><br><span class="line">echo_supervisord_conf</span><br><span class="line">echo_supervisord_conf &gt; /etc/supervisord.conf</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>如何使用supervisor监控一个进程（以gunicorn为例）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#supervisord.conf</span><br><span class="line">;这里是抄一个前辈的，我觉得他注释地很好了</span><br><span class="line">[program:web]</span><br><span class="line">directory &#x3D; &#x2F;root&#x2F;web ; 程序的启动目录</span><br><span class="line">command &#x3D; gunicorn -w 4 -b 127.0.0.1:8000 app:app ; 启动命令，可以看出与手动在命令行启动的命令是一样的</span><br><span class="line">autostart &#x3D; true ; 在 supervisord 启动的时候也自动启动</span><br><span class="line">startsecs &#x3D; 5 ; 启动 5 秒后没有异常退出，就当作已经正常启动了</span><br><span class="line">autorestart &#x3D; true ; 程序异常退出后自动重启</span><br><span class="line">startretries &#x3D; 3 ; 启动失败自动重试次数，默认是 3</span><br><span class="line">redirect_stderr &#x3D; true ; 把 stderr 重定向到 stdout，默认 false</span><br><span class="line">stdout_logfile_maxbytes &#x3D; 20MB ; stdout 日志文件大小，默认 50MB</span><br><span class="line">stdout_logfile_backups &#x3D; 20 ; stdout 日志文件备份数</span><br><span class="line">; stdout 日志文件，需要注意当指定目录不存在时无法正常启动，所以需要手动创建目录（supervisord 会自动创建日志文件）</span><br><span class="line">stdout_logfile &#x3D; &#x2F;data&#x2F;logs&#x2F;redis_stdout.log</span><br></pre></td></tr></table></figure>
+
+<p>启动supervisor吧：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">supervisord</span><br><span class="line"><span class="meta">#</span><span class="bash">如果你已经启动了，可以这样来重启,以便读取新配置</span></span><br><span class="line">supervisorctl reload</span><br></pre></td></tr></table></figure>
+
+<p>我非常建议在supervisord.conf里这样配置一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[inet_http_server]                         ; inet (TCP) server disabled by default</span><br><span class="line">port&#x3D;&lt;ip_address&gt;:&lt;port specifie&gt;       ; ip_address:port specifier, *:port for all iface</span><br><span class="line">username&#x3D;&lt;username&gt;                     ; default is no username (open server)</span><br><span class="line">password&#x3D;&lt;password&gt;                     ; default is no password (open server)</span><br></pre></td></tr></table></figure>
+
+<p>这样配置之后，重启supervisor，可以访问&lt;ip_address&gt;:&lt;port specifie&gt;登录到supervisor的后台页面，非常方便地查看管理各个由supervisor监控的进程，一键停止、重启进程，查看进程日志，十分方便，试过之后真的会大呼过瘾。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://jonuknownothingsnow.github.io/2017/08/27/BI%E5%BB%BA%E7%AB%99%E5%B0%8F%E7%BB%93%EF%BC%88%E4%BA%8C%EF%BC%89/" data-id="ckdzkkn3r0017xg5sh2adh3y8" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/BI%E7%AB%99%E7%82%B9/" rel="tag">BI站点</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Supervisor/" rel="tag">Supervisor</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/10/04/2017-10-04%20%E7%BB%99%E8%BF%90%E8%90%A5%E5%90%8C%E5%AD%A6%E7%9A%84python%E6%95%B0%E6%8D%AE%E6%8C%87%E5%8D%97/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          给运营同学的python数据指南（一）
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/08/20/2017-08-20-Flask+Bokeh%E5%AE%9E%E7%8E%B0%E7%BD%91%E9%A1%B5%E5%B1%95%E7%A4%BA%E5%8F%AF%E8%A7%86%E5%8C%96%E6%95%B0%E6%8D%AE/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用Bokeh进行网页上的可视化数据展示</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%A8%E6%A0%88%E6%BA%A2%E5%87%BA%EF%BC%88%E7%AC%91%EF%BC%89/">全栈溢出（笑）</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/">实用技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B7%A5%E5%85%B7%E7%BB%8F%E9%AA%8C/">工具经验</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E4%B8%8E%E7%AE%97%E6%B3%95/">数据与算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">数据分析</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E8%B5%9B%E4%BA%8B/">数据赛事</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95-%E6%A8%A1%E5%9E%8B/">算法/模型</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95%E6%A8%A1%E5%9E%8B/">算法模型</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6/">谐门武学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%B2%E5%9D%91%E6%8C%87%E5%8D%97/">防坑指南</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9B%B6%E6%95%A3%E8%AE%B0%E5%BD%95/">零散记录</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Albert/" rel="tag">Albert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Attention/" rel="tag">Attention</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AutoML/" rel="tag">AutoML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BERT/" rel="tag">BERT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BI%E7%AB%99%E7%82%B9/" rel="tag">BI站点</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BI%E7%BB%9D%E5%AD%A6/" rel="tag">BI绝学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bert/" rel="tag">Bert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bokeh/" rel="tag">Bokeh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Colaboratory/" rel="tag">Colaboratory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/" rel="tag">ELK</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Flask/" rel="tag">Flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GPU/" rel="tag">GPU</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hive/" rel="tag">Hive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jupyter-Notebook/" rel="tag">Jupyter Notebook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JupyterHub/" rel="tag">JupyterHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keras/" rel="tag">Keras</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kubernetes/" rel="tag">Kubernetes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LSTM/" rel="tag">LSTM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Metric/" rel="tag">Metric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NLP/" rel="tag">NLP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Odin/" rel="tag">Odin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pytorch/" rel="tag">Pytorch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/R/" rel="tag">R</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ray/" rel="tag">Ray</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Roberta/" rel="tag">Roberta</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scikit-learn/" rel="tag">Scikit-learn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Supervisor/" rel="tag">Supervisor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tensorflow/" rel="tag">Tensorflow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Transformer/" rel="tag">Transformer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cnn/" rel="tag">cnn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gensim/" rel="tag">gensim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tensorflow/" rel="tag">tensorflow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E6%A1%86%E6%9E%B6/" rel="tag">web框架</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%9A%E5%86%85%E6%96%B0%E9%97%BB/" rel="tag">业内新闻</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E5%88%86%E7%B1%BB/" rel="tag">二分类</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag">云服务器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0/" rel="tag">代码实现</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/" rel="tag">优化方法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%A0%E7%BB%9F%E7%AE%97%E6%B3%95/" rel="tag">传统算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%A8%E6%A1%9F%E6%BA%A2%E5%87%BA/" rel="tag">全桟溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%B3%E7%AD%96%E6%A0%91/" rel="tag">决策树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/" rel="tag">分布式计算</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E9%A6%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">前馈神经网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%AA%E6%9E%9D/" rel="tag">剪枝</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%9A%E5%AE%A2/" rel="tag">博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">卷积神经网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%82%E6%95%B0%E4%BC%98%E5%8C%96/" rel="tag">参数优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF%E5%B7%A5%E7%A8%8B/" rel="tag">后端工程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB/" rel="tag">图像识别</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" rel="tag">基本操作</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E6%A0%87%E7%AD%BE%E5%88%86%E7%B1%BB/" rel="tag">多标签分类</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9E%E6%88%98%E6%8A%80%E5%B7%A7/" rel="tag">实战技巧</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/" rel="tag">容器化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%86%E5%BA%A6%E8%81%9A%E7%B1%BB/" rel="tag">密度聚类</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7%E7%BB%8F%E9%AA%8C/" rel="tag">工具经验</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80/" rel="tag">工程基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E7%BB%8F%E9%AA%8C/" rel="tag">工程经验</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E6%AD%A5/" rel="tag">异步</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%89%8B%E5%86%99%E7%AE%97%E6%B3%95/" rel="tag">手写算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" rel="tag">数据分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">数据可视化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" rel="tag">数据处理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98/" rel="tag">数据挖掘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/" rel="tag">日志管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8/" rel="tag">显卡驱动</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9E%B6%E6%9E%84%E7%BB%9D%E5%AD%A6/" rel="tag">架构绝学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2/" rel="tag">模型部署</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag">深度学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%81%8C%E6%B0%B4/" rel="tag">灌水</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/" rel="tag">特征工程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9/" rel="tag">特征选择</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" rel="tag">环境搭建</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E9%97%AE%E9%A2%98/" rel="tag">环境问题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A9%B7%E9%AC%BC%E7%A7%98%E7%B1%8D/" rel="tag">穷鬼秘籍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/" rel="tag">算法原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0/" rel="tag">算法实现</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E6%80%A7%E8%83%BD/" rel="tag">算法性能</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E9%83%A8%E7%BD%B2/" rel="tag">算法部署</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" rel="tag">线性回归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95/" rel="tag">经典算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95/" rel="tag">聚类算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/" rel="tag">自动化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" rel="tag">自然语言处理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%AD%E7%BB%83%E6%8A%80%E5%B7%A7/" rel="tag">训练技巧</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BA%E6%96%87%E5%AE%9E%E7%8E%B0/" rel="tag">论文实现</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87/" rel="tag">评估指标</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%8D%E5%90%91%E9%87%8F%E5%8C%96/" rel="tag">词向量化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6/" rel="tag">谐门武学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B0%90%E9%97%A8%E9%80%9F%E6%94%BB/" rel="tag">谐门速攻</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" rel="tag">踩坑记录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/" rel="tag">迁移学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%80%BB%E8%BE%91%E6%96%AF%E8%92%82%E5%9B%9E%E5%BD%92/" rel="tag">逻辑斯蒂回归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" rel="tag">随机森林</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E6%88%90%E7%AE%97%E6%B3%95/" rel="tag">集成算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="tag">面向对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/" rel="tag">预训练模型</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Albert/" style="font-size: 10px;">Albert</a> <a href="/tags/Attention/" style="font-size: 11.25px;">Attention</a> <a href="/tags/AutoML/" style="font-size: 10px;">AutoML</a> <a href="/tags/BERT/" style="font-size: 10px;">BERT</a> <a href="/tags/BI%E7%AB%99%E7%82%B9/" style="font-size: 11.25px;">BI站点</a> <a href="/tags/BI%E7%BB%9D%E5%AD%A6/" style="font-size: 10px;">BI绝学</a> <a href="/tags/Bert/" style="font-size: 10px;">Bert</a> <a href="/tags/Bokeh/" style="font-size: 10px;">Bokeh</a> <a href="/tags/Colaboratory/" style="font-size: 10px;">Colaboratory</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/ELK/" style="font-size: 10px;">ELK</a> <a href="/tags/Flask/" style="font-size: 10px;">Flask</a> <a href="/tags/GPU/" style="font-size: 10px;">GPU</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Jupyter-Notebook/" style="font-size: 10px;">Jupyter Notebook</a> <a href="/tags/JupyterHub/" style="font-size: 11.25px;">JupyterHub</a> <a href="/tags/Keras/" style="font-size: 12.5px;">Keras</a> <a href="/tags/Kubernetes/" style="font-size: 11.25px;">Kubernetes</a> <a href="/tags/LSTM/" style="font-size: 10px;">LSTM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Metric/" style="font-size: 10px;">Metric</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/NLP/" style="font-size: 15px;">NLP</a> <a href="/tags/Odin/" style="font-size: 11.25px;">Odin</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Pytorch/" style="font-size: 10px;">Pytorch</a> <a href="/tags/R/" style="font-size: 10px;">R</a> <a href="/tags/Ray/" style="font-size: 10px;">Ray</a> <a href="/tags/Roberta/" style="font-size: 10px;">Roberta</a> <a href="/tags/Scikit-learn/" style="font-size: 10px;">Scikit-learn</a> <a href="/tags/Supervisor/" style="font-size: 10px;">Supervisor</a> <a href="/tags/Tensorflow/" style="font-size: 12.5px;">Tensorflow</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/cnn/" style="font-size: 10px;">cnn</a> <a href="/tags/docker/" style="font-size: 12.5px;">docker</a> <a href="/tags/gensim/" style="font-size: 10px;">gensim</a> <a href="/tags/tensorflow/" style="font-size: 10px;">tensorflow</a> <a href="/tags/web%E6%A1%86%E6%9E%B6/" style="font-size: 10px;">web框架</a> <a href="/tags/%E4%B8%9A%E5%86%85%E6%96%B0%E9%97%BB/" style="font-size: 11.25px;">业内新闻</a> <a href="/tags/%E4%BA%8C%E5%88%86%E7%B1%BB/" style="font-size: 10px;">二分类</a> <a href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10px;">云服务器</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0/" style="font-size: 11.25px;">代码实现</a> <a href="/tags/%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/" style="font-size: 10px;">优化方法</a> <a href="/tags/%E4%BC%A0%E7%BB%9F%E7%AE%97%E6%B3%95/" style="font-size: 11.25px;">传统算法</a> <a href="/tags/%E5%85%A8%E6%A1%9F%E6%BA%A2%E5%87%BA/" style="font-size: 10px;">全桟溢出</a> <a href="/tags/%E5%86%B3%E7%AD%96%E6%A0%91/" style="font-size: 11.25px;">决策树</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/" style="font-size: 10px;">分布式计算</a> <a href="/tags/%E5%89%8D%E9%A6%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 10px;">前馈神经网络</a> <a href="/tags/%E5%89%AA%E6%9E%9D/" style="font-size: 10px;">剪枝</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 10px;">博客</a> <a href="/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 11.25px;">卷积神经网络</a> <a href="/tags/%E5%8F%82%E6%95%B0%E4%BC%98%E5%8C%96/" style="font-size: 10px;">参数优化</a> <a href="/tags/%E5%90%8E%E7%AB%AF%E5%B7%A5%E7%A8%8B/" style="font-size: 10px;">后端工程</a> <a href="/tags/%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB/" style="font-size: 11.25px;">图像识别</a> <a href="/tags/%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" style="font-size: 10px;">基本操作</a> <a href="/tags/%E5%A4%9A%E6%A0%87%E7%AD%BE%E5%88%86%E7%B1%BB/" style="font-size: 10px;">多标签分类</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 12.5px;">大数据</a> <a href="/tags/%E5%AE%9E%E6%88%98%E6%8A%80%E5%B7%A7/" style="font-size: 10px;">实战技巧</a> <a href="/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/" style="font-size: 11.25px;">容器化</a> <a href="/tags/%E5%AF%86%E5%BA%A6%E8%81%9A%E7%B1%BB/" style="font-size: 10px;">密度聚类</a> <a href="/tags/%E5%B7%A5%E5%85%B7%E7%BB%8F%E9%AA%8C/" style="font-size: 11.25px;">工具经验</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80/" style="font-size: 12.5px;">工程基础</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E7%BB%8F%E9%AA%8C/" style="font-size: 13.75px;">工程经验</a> <a href="/tags/%E5%BC%82%E6%AD%A5/" style="font-size: 11.25px;">异步</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 12.5px;">性能优化</a> <a href="/tags/%E6%89%8B%E5%86%99%E7%AE%97%E6%B3%95/" style="font-size: 10px;">手写算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" style="font-size: 11.25px;">数据分析</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 11.25px;">数据可视化</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" style="font-size: 12.5px;">数据处理</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 10px;">数据库</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98/" style="font-size: 11.25px;">数据挖掘</a> <a href="/tags/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/" style="font-size: 11.25px;">日志管理</a> <a href="/tags/%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8/" style="font-size: 10px;">显卡驱动</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 20px;">机器学习</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E7%BB%9D%E5%AD%A6/" style="font-size: 11.25px;">架构绝学</a> <a href="/tags/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2/" style="font-size: 10px;">模型部署</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 17.5px;">深度学习</a> <a href="/tags/%E7%81%8C%E6%B0%B4/" style="font-size: 13.75px;">灌水</a> <a href="/tags/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/" style="font-size: 12.5px;">特征工程</a> <a href="/tags/%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9/" style="font-size: 10px;">特征选择</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" style="font-size: 10px;">环境搭建</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E9%97%AE%E9%A2%98/" style="font-size: 10px;">环境问题</a> <a href="/tags/%E7%A9%B7%E9%AC%BC%E7%A7%98%E7%B1%8D/" style="font-size: 10px;">穷鬼秘籍</a> <a href="/tags/%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/" style="font-size: 16.25px;">算法原理</a> <a href="/tags/%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0/" style="font-size: 10px;">算法实现</a> <a href="/tags/%E7%AE%97%E6%B3%95%E6%80%A7%E8%83%BD/" style="font-size: 10px;">算法性能</a> <a href="/tags/%E7%AE%97%E6%B3%95%E9%83%A8%E7%BD%B2/" style="font-size: 11.25px;">算法部署</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" style="font-size: 10px;">线性回归</a> <a href="/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95/" style="font-size: 10px;">经典算法</a> <a href="/tags/%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95/" style="font-size: 10px;">聚类算法</a> <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/" style="font-size: 10px;">自动化</a> <a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" style="font-size: 12.5px;">自然语言处理</a> <a href="/tags/%E8%AE%AD%E7%BB%83%E6%8A%80%E5%B7%A7/" style="font-size: 11.25px;">训练技巧</a> <a href="/tags/%E8%AE%BA%E6%96%87%E5%AE%9E%E7%8E%B0/" style="font-size: 10px;">论文实现</a> <a href="/tags/%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87/" style="font-size: 10px;">评估指标</a> <a href="/tags/%E8%AF%8D%E5%90%91%E9%87%8F%E5%8C%96/" style="font-size: 10px;">词向量化</a> <a href="/tags/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6/" style="font-size: 18.75px;">谐门武学</a> <a href="/tags/%E8%B0%90%E9%97%A8%E9%80%9F%E6%94%BB/" style="font-size: 11.25px;">谐门速攻</a> <a href="/tags/%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" style="font-size: 10px;">踩坑记录</a> <a href="/tags/%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/" style="font-size: 11.25px;">迁移学习</a> <a href="/tags/%E9%80%BB%E8%BE%91%E6%96%AF%E8%92%82%E5%9B%9E%E5%BD%92/" style="font-size: 10px;">逻辑斯蒂回归</a> <a href="/tags/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" style="font-size: 10px;">随机森林</a> <a href="/tags/%E9%9B%86%E6%88%90%E7%AE%97%E6%B3%95/" style="font-size: 10px;">集成算法</a> <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" style="font-size: 10px;">面向对象</a> <a href="/tags/%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/" style="font-size: 12.5px;">预训练模型</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/08/18/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/15/NLP%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E5%88%86%E4%BA%AB/">谐门武学-NLP预训练模型服务分享</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/13/%E9%9B%B6%E6%95%A3%E8%AE%B0%E5%BD%9520200613/">零散记录:20200613</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/25/%E9%9B%B6%E6%95%A3%E8%AE%B0%E5%BD%95:20200425/">零散记录:20200425</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/18/Python%E8%B0%83%E7%94%A8c%E4%BB%A3%E7%A0%81/">Python调用c代码</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 王大炮<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

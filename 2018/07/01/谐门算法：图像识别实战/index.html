@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>谐门算法：图像识别实战 | 火力支援</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="谐门算法：图像识别实战之前我们聊了关于图像识别方面的理论内容，在谐门算法：卷积神经网络原理这节里面我们从头到尾地梳理了卷积神经网络的原理，介绍了基础的卷积神经网络构成。在谐门算法：使用预训练模型一节了里我们介绍预训练模型之所以有效的原因，以及大致的使用方法。今天我们主要讲实战方面的内容，将以一个假想的问题为例，来讨论如何大致上去解决一个图像识别相关的深度学习问题。 我们这次将会涉及到： ​">
+<meta property="og:type" content="article">
+<meta property="og:title" content="谐门算法：图像识别实战">
+<meta property="og:url" content="https://jonuknownothingsnow.github.io/2018/07/01/%E8%B0%90%E9%97%A8%E7%AE%97%E6%B3%95%EF%BC%9A%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB%E5%AE%9E%E6%88%98/index.html">
+<meta property="og:site_name" content="火力支援">
+<meta property="og:description" content="谐门算法：图像识别实战之前我们聊了关于图像识别方面的理论内容，在谐门算法：卷积神经网络原理这节里面我们从头到尾地梳理了卷积神经网络的原理，介绍了基础的卷积神经网络构成。在谐门算法：使用预训练模型一节了里我们介绍预训练模型之所以有效的原因，以及大致的使用方法。今天我们主要讲实战方面的内容，将以一个假想的问题为例，来讨论如何大致上去解决一个图像识别相关的深度学习问题。 我们这次将会涉及到： ​">
+<meta property="og:locale">
+<meta property="article:published_time" content="2018-06-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-08-18T06:31:54.676Z">
+<meta property="article:author" content="王大炮">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="谐门武学">
+<meta property="article:tag" content="Keras">
+<meta property="article:tag" content="图像识别">
+<meta property="article:tag" content="模型部署">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="火力支援" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.0.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">火力支援</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://jonuknownothingsnow.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-谐门算法：图像识别实战" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/01/%E8%B0%90%E9%97%A8%E7%AE%97%E6%B3%95%EF%BC%9A%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB%E5%AE%9E%E6%88%98/" class="article-date">
+  <time datetime="2018-06-30T16:00:00.000Z" itemprop="datePublished">2018-07-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95-%E6%A8%A1%E5%9E%8B/">算法/模型</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      谐门算法：图像识别实战
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="谐门算法：图像识别实战"><a href="#谐门算法：图像识别实战" class="headerlink" title="谐门算法：图像识别实战"></a>谐门算法：图像识别实战</h1><p>之前我们聊了关于图像识别方面的理论内容，在<a href="https://jonuknownothingsnow.github.io/2018/06/03/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">谐门算法：卷积神经网络原理</a>这节里面我们从头到尾地梳理了卷积神经网络的原理，介绍了基础的卷积神经网络构成。在<a href="https://jonuknownothingsnow.github.io/2018/06/18/%E8%B0%90%E9%97%A8%E7%AE%97%E6%B3%95%EF%BC%9A%E4%BD%BF%E7%94%A8%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/">谐门算法：使用预训练模型</a>一节了里我们介绍预训练模型之所以有效的原因，以及大致的使用方法。今天我们主要讲实战方面的内容，将以一个假想的问题为例，来讨论如何大致上去解决一个图像识别相关的深度学习问题。</p>
+<p>我们这次将会涉及到：</p>
+<p>​    1.深度学习框架的选择</p>
+<p>​    2.图像预处理</p>
+<p>​    3.构建一个解决问题的深度学习模型</p>
+<p>​    4.将模型部署到网站后端</p>
+<p>​    5.其他乱七八糟的相关内容</p>
+<p>我们这次不会涉及到的内容有：</p>
+<p>​    1.如何获取数据集</p>
+<p>​    2.具体模型的完整源代码</p>
+<p>​    3.相关权重的下载地址</p>
+<p>这样安排的理由是我们希望专注于实际上解决问题的过程，所举例的问题也是一个假想的题目，我们并非在针对某个确定的问题做真正的解题，而是和大家一起探讨一种较为通用的基础的解题过程。</p>
+ <a id="more"></a>
+
+<h2 id="题目设定"><a href="#题目设定" class="headerlink" title="题目设定"></a>题目设定</h2><p>我们沿用在预训练模型中使用的一个假想问题，假设我们要用过用户的头像识别用户的性别。这是一个基于图像识别的二分类问题，乍一看起来有些蠢，因为我们的第一感觉男女之间的头像应该不会有什么绝对的不同，还有诸如男性使用自己女友照片作为头型、男性使用萌萌的二次元头像，女性使用自己的偶像照片作为头像等问题。</p>
+<p>但仔细想一想，我们确实能够在大部分时间里通过好友的头像来判断出其性别，而且准确率还不低，人能够做到的时候，我们的神经网络也可以做。</p>
+<p>假设有一万张头像，标注了男女性别。（不要问我哪里搞来的，我们学python的老哥从入门开始就在学些下三滥的手段（笑）），我们如何基于这个数据，来训练出一个能够有效识别用户性别的模型？</p>
+<h2 id="选择框架"><a href="#选择框架" class="headerlink" title="选择框架"></a>选择框架</h2><p>磨刀不误砍柴工，在我们正式开始处理这个问题之前，我们应该要选择一个趁手的深度学习框架。（啥？你自己用c++手撸？），备选项有很多，tensorflow、keras、pytorch、mxnet等，目前比较主流的就是提到名字这几种，tensorflow背后是谷歌、pytorch背后是facebook、mxnet背后是amazon，都有大佬站台，其实选哪个都可以，简单的比较一下吧：</p>
+<table>
+<thead>
+<tr>
+<th>框架</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tensorflow</td>
+<td>Google爸爸，用户数最多，例子与文档都很丰富，性能较好。</td>
+<td>变动频繁，官方例子与文档令人费解，许多网络上的例子已落后版本许多。</td>
+</tr>
+<tr>
+<td>Keras</td>
+<td>简单，工具好用且清晰，用的人多，例子多，文档完整且有官方中文，后端是tensorflow（也可以用theano）。</td>
+<td>速度不快，如果有很多特殊的需求可能还是要用底层的tensorflow改</td>
+</tr>
+<tr>
+<td>Pytorch</td>
+<td>符合python习惯的框架，更清晰地了解模型中发生了什么。工具好用，教程清晰。</td>
+<td>速度一般，相对来说用户较少。</td>
+</tr>
+<tr>
+<td>mxnet</td>
+<td>（我没用过，据说）速度快</td>
+<td>（我没用过，据说）文档有坑，用户较少。</td>
+</tr>
+</tbody></table>
+<p>我的选择是keras，对于新手以及一些简单的任务来说，keras真的很够用了。</p>
+<h3 id="图像处理"><a href="#图像处理" class="headerlink" title="图像处理"></a>图像处理</h3><p>使用框架我们的第一个问题永远是，如何读取数据，安排数据格式。这里介绍Keras的方法：我们先把图片分成train和test两个部分，新建/train 和 /test 两个文件夹，再在文件夹里设置male和female的文件夹，将图片按照各自的类别放好，这样就可以正式开始我们的工作了。</p>
+<p>###读取图片</p>
+<p>我们之前讲到图片是可以用一个矩阵来表述的，那么如何把文件夹里的图片转化为矩阵呢？python的许多图片库都有类似的方法，比如会绘图库matplotlib</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">img = plt.imread(<span class="string">&quot;train/male/filename.jpg&quot;</span>)</span><br><span class="line"><span class="comment">#看看矩阵模式的图片</span></span><br><span class="line">print(img)</span><br><span class="line"><span class="comment">#显示图片看看</span></span><br><span class="line">plt.imshow(img)</span><br></pre></td></tr></table></figure>
+
+<p>这个已经可以满足简单的从文件中读取图片的需求，但是假如有更多的比如从file对象里读取图片、从2进制字符串里读取图片之类的需求，plt就有点力不从心了，可以选择opencv或者skimage，相对来说skimage更便捷、opencv更强大。</p>
+<h3 id="更加常用的方式"><a href="#更加常用的方式" class="headerlink" title="更加常用的方式"></a>更加常用的方式</h3><p>回想我们在原理一节里提到卷积神经网络的训练是按batch进行的，那么理论上框架里应该有个对象或者方法，分batch从文件夹里读取文件，喂给我们的模型。而不需要我们自己去写。</p>
+<p>这个对象在Keras里是这样的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Keras</span><br><span class="line"><span class="keyword">from</span> keras.preprocessing.image <span class="keyword">import</span> ImageDataGenerator</span><br><span class="line"></span><br><span class="line">gen = ImageDataGenerator(</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">#如果是灰度图，在参数中设color_mode=&quot;grayscale&quot;</span></span><br><span class="line">train_batches=gen.flow_from_directory(<span class="string">&quot;train&quot;</span>,target_size=(<span class="number">64</span>,<span class="number">64</span>)，shuffle=<span class="literal">True</span>,batch_size=<span class="number">16</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这里的train_batches是一个generator，每次调用它的next函数，就会获取一个batch的图片，并对其做相应的处理后输出。</p>
+<p>我们看到flow_from_directory的方法里有个参数叫target_size,它是输出图片的shape，keras会把所有不同形状的图片转化到这个形状。假如要训练的模型是model，这里一般会填入model.input_shape[1:3],来保证输出图片与模型输入契合。</p>
+<h3 id="数据增强"><a href="#数据增强" class="headerlink" title="数据增强"></a>数据增强</h3><p>刚刚我们看到生成器可以resize图片使它们变化成指定的格式，实际上我们还可以利用generator对图像做更多的处理，以完成一些简单的数据增强工作。不过在介绍如何简易的数据增强之前，我们先来聊下为什么要做数据增强。</p>
+<h4 id="为什么要做数据增强"><a href="#为什么要做数据增强" class="headerlink" title="为什么要做数据增强"></a>为什么要做数据增强</h4><p>有一种说法是一个模型的效果七分靠数据，两分靠特征，一分靠模型。数据是一切的起点与关键，在算力足够的情况下，数据当然是越多越好。数据增强就是通过一些手段，对我们已有的数据进行操作，生成更多的训练用数据。想想看，同一场比赛，人家只有一万数据，你有两万，是不是爽的要死。</p>
+<h4 id="怎么做数据增强"><a href="#怎么做数据增强" class="headerlink" title="怎么做数据增强"></a>怎么做数据增强</h4><p>数据增强基于一个原则，尽可能的使处理后的数据与原先的不同，但是又不破坏它与标签的对应性。也就是说做出来的图片虽然与之前有很大变化，但是原先的标签还是正确的。</p>
+<p>这样做其中更深层的原理在于：标签是数据深层的隐藏的属性，模型实际上是建立数据到标签的映射，如果你能制定一个规则，使得数据变化而不影响它的标签，就相当于除去了数据中实际上与标签不相干的属性，使模型更加专注于核心的特征。</p>
+<p>举例来说，通过照片识别性别，理论上来说，水平翻转照片，不会影响这张照片所表达的性别属性，同理，可以做增加少量噪点、修改图片颜色等等操作，来在标签不变的情况下，增加可供训练的图片量。</p>
+<p>举个反例，拉伸照片在这个问题下可不可行呢？可能不是不可行的，拉伸可能会改变人脸的五官比例，而使得一张照片从表达女性变为表达男性。</p>
+<h4 id="使用Keras进行简单的数据增强"><a href="#使用Keras进行简单的数据增强" class="headerlink" title="使用Keras进行简单的数据增强"></a>使用Keras进行简单的数据增强</h4><p>keras可以帮助我们非常简单地做些数据增强的工作，在生成generator的时候设置就好了，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">gen = ImageDataGenerator(</span><br><span class="line">    horizontal_flip = <span class="literal">True</span>,<span class="comment">#水平翻转</span></span><br><span class="line">    vertical_flip = <span class="literal">True</span>,<span class="comment">#垂直翻转，不应该做，只是随便演示下</span></span><br><span class="line">    preprocessing_function = pf<span class="comment">#可以传入自制的数据处理函数</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>keras还内置了平移、缩放、倾斜、白化等等图像处理的方法，这里就不都写了，好奇的同学可以参看<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/30197320">这篇</a>文章（不是我写哒），对keras中ImageDataGenerator的各种图像处理有相当详细的说明。</p>
+<h2 id="构建模型"><a href="#构建模型" class="headerlink" title="构建模型"></a>构建模型</h2><p>搭建模型需要分析题目与数据吗？看情况，如果只是想随便搞个模型莽一莽，那真的不怎么需要分析题目。先莽上去再说，反正也花不了多少时间。</p>
+<p>由于我们mac pro的羸弱性能，先随便搞个简单卷积神经网络吧。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">model = Sequential()</span><br><span class="line">model.add(Conv2D(filters=<span class="number">32</span>, kernel_size=(<span class="number">3</span>,<span class="number">3</span>), activation=<span class="string">&quot;relu&quot;</span>, padding=<span class="string">&quot;same&quot;</span>,input_shape=(<span class="number">64</span>,<span class="number">64</span>,<span class="number">1</span>),name=<span class="string">&quot;conv_a1&quot;</span>))</span><br><span class="line">model.add(Conv2D(filters=<span class="number">32</span>, kernel_size=(<span class="number">3</span>,<span class="number">3</span>), activation=<span class="string">&quot;relu&quot;</span>, padding=<span class="string">&quot;same&quot;</span>,name=<span class="string">&quot;conv_a2&quot;</span>))</span><br><span class="line">model.add(BatchNormalization(name=<span class="string">&quot;b_1&quot;</span>))</span><br><span class="line">model.add(MaxPooling2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">model.add(Dropout(rate=<span class="number">0.25</span>))</span><br><span class="line">model.add(Conv2D(filters=<span class="number">64</span>, kernel_size=(<span class="number">3</span>,<span class="number">3</span>), activation=<span class="string">&quot;relu&quot;</span>, padding=<span class="string">&quot;same&quot;</span>,name=<span class="string">&quot;conv_b1&quot;</span>))</span><br><span class="line">model.add(Conv2D(filters=<span class="number">64</span>, kernel_size=(<span class="number">3</span>,<span class="number">3</span>), activation=<span class="string">&quot;relu&quot;</span>, padding=<span class="string">&quot;same&quot;</span>,name=<span class="string">&quot;conv_b2&quot;</span>))</span><br><span class="line">model.add(BatchNormalization(name=<span class="string">&quot;b_2&quot;</span>))</span><br><span class="line">model.add(MaxPooling2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">model.add(Dropout(rate=<span class="number">0.25</span>))</span><br><span class="line">model.add(Flatten())</span><br><span class="line">model.add(Dense(<span class="number">1024</span>,activation=<span class="string">&quot;relu&quot;</span>,name=<span class="string">&quot;D_1&quot;</span>))</span><br><span class="line">model.add(BatchNormalization(name=<span class="string">&quot;b_3&quot;</span>))</span><br><span class="line">model.add(Dropout(rate=<span class="number">0.4</span>))</span><br><span class="line">model.add(Dense(<span class="number">2</span>, activation=<span class="string">&quot;softmax&quot;</span>,name=<span class="string">&quot;output&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>这是一个十分简单的卷积神经网络模型，简单到有点类似于元祖级卷积神经网络LeNet，也有点类似于简化版的VGG16，唯一比这些老爷级模型先进的就是加入了几个BatchNormalization层，效果还不错，这个简易模型在Kaggle的肺炎胸透数据集上可以达到99%的召回以及约90%的AUC。</p>
+<p>你可能注意到了我给许多层都加上了name，这是为了便于之后读取保存的权重，这个我们在下一节细说。</p>
+<p>在性能足够的情况下，我们可以在这个模型的基础上往上堆料，将它扩展成VGG16或者VGG19，再进一步，我们可以从Keras的源码里学习到ResNet与DenseNet等强力模型的搭建方法，使用这些模型来解决这个问题。毕竟我们假想的问题非常的典型，是一个识别模式的二分类问题，几乎所有经典的图像识别模型对这类问题都有很好的相性。</p>
+<h3 id="上吧！莽夫！"><a href="#上吧！莽夫！" class="headerlink" title="上吧！莽夫！"></a>上吧！莽夫！</h3><p>现在模型已经搭建好了，但是它还只是一个骨架，就好像一个婴儿，刚出生虽然已经有了大脑，但是大脑里没有知识，我们需要通过训练让它获得知识。</p>
+<h4 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h4><p>在keras中训练的第一部是编译，实际上是补充一些模型要在训练中使用的内容，例如优化器、loss函数等。在其他框架里这步有时候被放在模型定义的部分，有时候被放在训练的操作中。在keras里是这样写的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model.compile(Adam(lr=<span class="number">0.001</span>),loss=<span class="string">&quot;categorical_crossentropy&quot;</span>, metrics=[<span class="string">&quot;accuracy&quot;</span>])</span><br></pre></td></tr></table></figure>
+
+<p>这一句里定义了分别定义了使用的优化器、loss函数以及一个评价指标。如果在训练了一段时间之后你觉得需要改动一些内容，你可以再编译一次，假设觉得learning_rate太大了想改小点：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model.compile(Adam(lr=<span class="number">0.0001</span>),loss=<span class="string">&quot;categorical_crossentropy&quot;</span>, metrics=[<span class="string">&quot;accuracy&quot;</span>])</span><br></pre></td></tr></table></figure>
+
+<h4 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h4><p>完成编译后就可以开始训练模型了，exciting！</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#通过epochs来设置训练轮数</span></span><br><span class="line">model.fit_generator(train_batches,epochs=<span class="number">3</span>,verbose=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>训练时可以看到进度条以及当前的loss与metric值，你也可以通过设置validation_data之类的参数来设置验证集，来查看这一轮训练后在验证集上的效果。</p>
+<p>你可以一口气训练很多轮，也可以分成多次训练，也可以修改lr等参数之后再继续启动训练。</p>
+<h4 id="保存-amp-读取权重"><a href="#保存-amp-读取权重" class="headerlink" title="保存&amp;读取权重"></a>保存&amp;读取权重</h4><p>在完成训练后，我们的模型已经有了一些知识，我们当然不希望在我们关掉电脑的时候，这些知识都丢掉。所以我们要设法保存参数权重：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model.save_weights(<span class="string">&quot;conv.h5&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这样一来，我们在下次，或者在另一个地方，需要用到我们的模型的时候，就不需要重新训练了，我们只需要构建一个一模一样的全新模型，再从这份文件中导入权重，就可以获得一个拥有一样知识的模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model.load_weights(<span class="string">&quot;conv.h5&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="预测"><a href="#预测" class="headerlink" title="预测"></a>预测</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model.predict(test_batches,verbose=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>你可能会需要知道预测的结果分别对应那些图片：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">filenames = test_batches.filenames</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="分析题目"><a href="#分析题目" class="headerlink" title="分析题目"></a>分析题目</h3><p>在我们完成了最初的Baseline模型之后，是时候认真考虑一下问题本身的特征了。问题是二分类还是多分类？需不需要标注目标？图片是RGB还是灰度图？正反例之间比例如何？题目有没有指定最终的评分方式?如果有的话是否有trick可以帮助我们提高这一分数？如果没有的话我们应该采取什么样的方式来评估我们的模型？</p>
+<p>曾经出现过哪些同类型的题目？当时有哪些好的解决方案？是否可以参照？等等等等，这块的内容实在太多了，除了对问题的分析以外，还需要对数据进行探索性的分析，以便确定进一步的模型改进方向。</p>
+<h3 id="借助外力（如果可以的话）"><a href="#借助外力（如果可以的话）" class="headerlink" title="借助外力（如果可以的话）"></a>借助外力（如果可以的话）</h3><p>我们有许多改进方案，都是基于”算力足够“这一大前提下的，但是我们的算力往往都不够，我的小MacbookPro跑起ResNet就慢的跟屎一样，一万张图片跑一个epoch可能要两个小时，实在是太慢了。所以在算力不支持我们挥霍的时候，我们需要借助一些外部的力量。</p>
+<p>考虑我们的题目，是识别头像中的男女模式。这里涉及到的图片有相当一部分会是现实生活中的照片，那么一些基于ImageNet和MSCOCO等图片数据集训练出来的模型，将会对我们产生一定的帮助。其原理在于，我们的数据集和算力可能并不足以让模型分辨照片中的物件，我们的模型是看不出来照片里是否有汽车或者是否有花的，但是这些物件可能又与性别有较强的关联。</p>
+<p>这时候就需要一些已经经过大量训练，能够识别各种物件的模型来辅助我们，告诉我们图片中有哪些物件，我们再以这些信息为特征，训练模型发现头像中物件与主人性别的关系。</p>
+<p>在实际解题时，我们会选择预训练的ResNet等模型，来提取图片中的特征，这个工作可以详见<a href="https://jonuknownothingsnow.github.io/2018/06/18/%E8%B0%90%E9%97%A8%E7%AE%97%E6%B3%95%EF%BC%9A%E4%BD%BF%E7%94%A8%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/">谐门算法：使用预训练模型</a>，这里我们简单的以上面的卷积神经网络为例，来说明下预训练模型是怎么运作的。</p>
+<p>首先你构筑一个和目标模型（实际中可能是ResNet等）一致，但是去掉了输出层的模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">model = Sequential()</span><br><span class="line">model.add(Conv2D(filters=<span class="number">32</span>, kernel_size=(<span class="number">3</span>,<span class="number">3</span>), activation=<span class="string">&quot;relu&quot;</span>, padding=<span class="string">&quot;same&quot;</span>,input_shape=(<span class="number">64</span>,<span class="number">64</span>,<span class="number">1</span>),name=<span class="string">&quot;conv_a1&quot;</span>))</span><br><span class="line">model.add(Conv2D(filters=<span class="number">32</span>, kernel_size=(<span class="number">3</span>,<span class="number">3</span>), activation=<span class="string">&quot;relu&quot;</span>, padding=<span class="string">&quot;same&quot;</span>,name=<span class="string">&quot;conv_a2&quot;</span>))</span><br><span class="line">model.add(BatchNormalization(name=<span class="string">&quot;b_1&quot;</span>))</span><br><span class="line">model.add(MaxPooling2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">model.add(Dropout(rate=<span class="number">0.25</span>))</span><br><span class="line">model.add(Conv2D(filters=<span class="number">64</span>, kernel_size=(<span class="number">3</span>,<span class="number">3</span>), activation=<span class="string">&quot;relu&quot;</span>, padding=<span class="string">&quot;same&quot;</span>,name=<span class="string">&quot;conv_b1&quot;</span>))</span><br><span class="line">model.add(Conv2D(filters=<span class="number">64</span>, kernel_size=(<span class="number">3</span>,<span class="number">3</span>), activation=<span class="string">&quot;relu&quot;</span>, padding=<span class="string">&quot;same&quot;</span>,name=<span class="string">&quot;conv_b2&quot;</span>))</span><br><span class="line">model.add(BatchNormalization(name=<span class="string">&quot;b_2&quot;</span>))</span><br><span class="line">model.add(MaxPooling2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">model.add(Dropout(rate=<span class="number">0.25</span>))</span><br><span class="line">model.add(Flatten())</span><br><span class="line">model.add(Dense(<span class="number">1024</span>,activation=<span class="string">&quot;relu&quot;</span>,name=<span class="string">&quot;D_1&quot;</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#注意，最后负责输出的这部分被删除了。</span></span><br><span class="line"><span class="comment">#model.add(BatchNormalization(name=&quot;b_3&quot;))</span></span><br><span class="line"><span class="comment">#model.add(Dropout(rate=0.4))</span></span><br><span class="line"><span class="comment">#model.add(Dense(2, activation=&quot;softmax&quot;,name=&quot;output&quot;))</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>构建完成后，读取相应的预训练权重（网上有很多这种预训练的权重）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model.load_weights(<span class="string">&quot;weights.h5&quot;</span>,by_name=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这时候再用这个模型对原始数据进行预测，由于输出层被去掉了，得到的结果将是最后一层的输出，也就是1024个数字。</p>
+<p>然后我们再基于这些特征进行训练，类似于给它接上一个输出头：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">model = Sequential([</span><br><span class="line">        Dense(<span class="number">1024</span>,activation=<span class="string">&#x27;relu&#x27;</span>,input_shape=X_train.shape[<span class="number">1</span>:]),</span><br><span class="line">        BatchNormalization(),</span><br><span class="line">        Dropout(<span class="number">0.5</span>),</span><br><span class="line">        Dense(<span class="number">2</span>, activation=<span class="string">&quot;softmax&quot;</span>)</span><br><span class="line">    ])</span><br></pre></td></tr></table></figure>
+
+<p>这样就可以利用预训练模型提取的特征进行判断了。</p>
+<h3 id="融合模型"><a href="#融合模型" class="headerlink" title="融合模型"></a>融合模型</h3><p>最后我们需要融合不同的模型来形成一个最终的模型，我采用的方法是把所有模型都当做预训练模型使用，包括本地训练的可以直接判断的模型也处理成预训练模型。将所有模型提取出的特征汇总，再接上统一的输出部分，训练完毕后保存。</p>
+<p>这部分我们就不贴代码了好不好？很简单的大家自己理解下就好了。</p>
+<h2 id="部署模型"><a href="#部署模型" class="headerlink" title="部署模型"></a>部署模型</h2><p>既然是我们最后要使用的模型，那么当然离不开最终的部署上线啦，无论是最后是作为一个接口也好，还是形成一张页面也好，都是需要我们的模型部署在网站后端，能够接收数据，输出判断结果的。</p>
+<p>我们这里试着把keras的模型部署到flask的后端上，能够接收前端页面传来的图片，进行判断后输出结果。</p>
+<h3 id="读取file模式（Buffer）的图片"><a href="#读取file模式（Buffer）的图片" class="headerlink" title="读取file模式（Buffer）的图片"></a>读取file模式（Buffer）的图片</h3><p>有的教程里会教大家把前端传来的图片保存到本地再按照本地图片的读取方式进行工作，说实话这简直是脱了裤子放屁，而且会大大增加响应时间，是非常辣鸡的做法。就算真的有保存的需求，也该保存在数据库里，而且处理判断的动作应该在保存之前，以便能够及时返回结果，保存的动作完全可以异步来做。</p>
+<p>我们先来看下前端传来的文件是什么，前端post一张图片过来，它在request.files里,如果没有其他文件的话他是request.files.values()[0]。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x = list(request.files.values())[<span class="number">0</span>]</span><br><span class="line"><span class="comment">#获取文件对象</span></span><br><span class="line">file = x.stream</span><br></pre></td></tr></table></figure>
+
+<p>这个file是个临时文件对象，它的用法和我们刚开始学python时遇到的file是几乎一样的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#跟这个file 一样</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">&quot;xxx.jpg&quot;</span>,<span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> file:</span><br><span class="line">    b = file.read()</span><br></pre></td></tr></table></figure>
+
+<p>这个file也是能用read()方法获得二进制字符串，再通过二进制字符串读取图片，不过我们没有必要这样做，我们是有方法直接从file对象(BufferedReader)里读取图片的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> io</span><br><span class="line">img = io.imread(file)</span><br></pre></td></tr></table></figure>
+
+<p>img就已经是numpy矩阵格式的图片了。</p>
+<h3 id="模型部署"><a href="#模型部署" class="headerlink" title="模型部署"></a>模型部署</h3><p>获得img后我们只差两部就可以获取结果了，首先用预训练模型提取特征(predict),然后将特征输入到训练好的输出模型中，预测获取最后的类别，为了方便起见，建议大家把模型合成一个类，代码类似于：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WxPicModel</span>(<span class="params">object</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.local_model = load_local_model(weight_path=<span class="string">&quot;models/weights/local_weights.h5&quot;</span>)</span><br><span class="line">        self.res_model = load_res_model(weight_path=<span class="string">&quot;models/weights/resnet50.h5&quot;</span>)</span><br><span class="line">        self.head_model = load_head_model((<span class="number">4096</span>,), weight_path=<span class="string">&quot;models/weights/head_weights.h5&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">predict</span>(<span class="params">self, img</span>):</span></span><br><span class="line">        re_img = cv2.resize(img, (<span class="number">64</span>, <span class="number">64</span>))</span><br><span class="line">        x_local = self.local_model.predict(np.array([re_img]))</span><br><span class="line">        </span><br><span class="line">        re_img = cv2.resize(img, (<span class="number">128</span>, <span class="number">128</span>))</span><br><span class="line">        x_res = self.res_model.predict(np.array([re_img]))</span><br><span class="line">        </span><br><span class="line">        x = np.concatenate([x_res, x_local], axis=<span class="number">1</span>)</span><br><span class="line">        result = self.head_model.predict(x)[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+
+<p>在flask初始化时就载入这个模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Create app</span></span><br><span class="line">app = Flask(__name__)</span><br><span class="line">model = models.wx_pic.WxPicModel()</span><br></pre></td></tr></table></figure>
+
+<p>但是这时候如果你直接使用模型，是会报错的，例如这样使用时：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(&quot;/predict&quot;, methods=[&#x27;GET&#x27;, &#x27;POST&#x27;])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">predict</span>():</span></span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">&quot;POST&quot;</span>:</span><br><span class="line">        x = list(request.files.values())[<span class="number">0</span>]</span><br><span class="line">        f = x.stream</span><br><span class="line">        img = io.imread(f)</span><br><span class="line">        result = model.predict(img)</span><br><span class="line">        <span class="keyword">return</span> jsonify(&#123;<span class="string">&quot;result&quot;</span>:result&#125;)</span><br><span class="line">    <span class="keyword">return</span> whatever</span><br></pre></td></tr></table></figure>
+
+<p>它会告诉你某节点不在图中，正确的使用方式是在app初始化时也初始化图，并在后面调用，like this：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Create app</span></span><br><span class="line">app = Flask(__name__)</span><br><span class="line">model = models.wx_pic.WxPicModel()</span><br><span class="line">graph = tf.get_default_graph()</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(&quot;/predict&quot;, methods=[&#x27;GET&#x27;, &#x27;POST&#x27;])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">predict</span>():</span></span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">&quot;POST&quot;</span>:</span><br><span class="line">        x = list(request.files.values())[<span class="number">0</span>]</span><br><span class="line">        f = x.stream</span><br><span class="line">        img = io.imread(f)</span><br><span class="line">        <span class="keyword">with</span> graph.as_default():</span><br><span class="line">            result = model.predict(img)</span><br><span class="line">        <span class="keyword">return</span> jsonify(&#123;<span class="string">&quot;result&quot;</span>:result&#125;)</span><br><span class="line">    <span class="keyword">return</span> whatever</span><br></pre></td></tr></table></figure>
+
+
+
+<p>完美，这样一来你就可以在网页上传回图片，让后端进行预测判断了，大家注意到我回传结果的时候用jsonify这个方法，是flask内置的一个把dict传化成json的方法，既然要传回给前端么尽量做得漂亮点。</p>
+<p>在前端我使用axios来获取response的数据，但是这些跟我们今天的主题不怎么搭界，再讲下去要讲到我怎么用Vue搭前台页面并监视动作更新数据了，所以部署这部分我们就到此为止吧。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>本来我还想讲讲BatchNormalization之类的东西，不过感觉今天的内容已经够多了，而且这些可以放到之后关于trick的内容里，就先不写了。这次我们从框架的挑选，再到如何读取数据，构建模型，训练模型到最后的部署上线，虽然很简单，但也可以算是完整的走了一遍流程，实际面对更复杂的问题时，或许需要我们用到更复杂高深的技术与技巧，但是整个流程思路还是类似的，心里多少会更有底。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://jonuknownothingsnow.github.io/2018/07/01/%E8%B0%90%E9%97%A8%E7%AE%97%E6%B3%95%EF%BC%9A%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB%E5%AE%9E%E6%88%98/" data-id="ckdzkkn7800c7xg5sbegchj83" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Keras/" rel="tag">Keras</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB/" rel="tag">图像识别</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2/" rel="tag">模型部署</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag">深度学习</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6/" rel="tag">谐门武学</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/09/01/%E8%B0%90%E9%97%A8%E6%8A%80%E5%B7%A7%EF%BC%9A%E9%99%8D%E5%99%AA%E8%87%AA%E5%8A%A8%E7%BC%96%E7%A0%81%E6%9C%BA/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          谐门技巧：降噪自动编码机
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/06/18/%E8%B0%90%E9%97%A8%E7%AE%97%E6%B3%95%EF%BC%9A%E4%BD%BF%E7%94%A8%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">谐门算法：使用预训练模型</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%A8%E6%A0%88%E6%BA%A2%E5%87%BA%EF%BC%88%E7%AC%91%EF%BC%89/">全栈溢出（笑）</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/">实用技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B7%A5%E5%85%B7%E7%BB%8F%E9%AA%8C/">工具经验</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E4%B8%8E%E7%AE%97%E6%B3%95/">数据与算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">数据分析</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E8%B5%9B%E4%BA%8B/">数据赛事</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95-%E6%A8%A1%E5%9E%8B/">算法/模型</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95%E6%A8%A1%E5%9E%8B/">算法模型</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6/">谐门武学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%B2%E5%9D%91%E6%8C%87%E5%8D%97/">防坑指南</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9B%B6%E6%95%A3%E8%AE%B0%E5%BD%95/">零散记录</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Albert/" rel="tag">Albert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Attention/" rel="tag">Attention</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AutoML/" rel="tag">AutoML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BERT/" rel="tag">BERT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BI%E7%AB%99%E7%82%B9/" rel="tag">BI站点</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BI%E7%BB%9D%E5%AD%A6/" rel="tag">BI绝学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bert/" rel="tag">Bert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bokeh/" rel="tag">Bokeh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Colaboratory/" rel="tag">Colaboratory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/" rel="tag">ELK</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Flask/" rel="tag">Flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GPU/" rel="tag">GPU</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hive/" rel="tag">Hive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jupyter-Notebook/" rel="tag">Jupyter Notebook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JupyterHub/" rel="tag">JupyterHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keras/" rel="tag">Keras</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kubernetes/" rel="tag">Kubernetes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LSTM/" rel="tag">LSTM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Metric/" rel="tag">Metric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NLP/" rel="tag">NLP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Odin/" rel="tag">Odin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pytorch/" rel="tag">Pytorch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/R/" rel="tag">R</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ray/" rel="tag">Ray</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Roberta/" rel="tag">Roberta</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scikit-learn/" rel="tag">Scikit-learn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Supervisor/" rel="tag">Supervisor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tensorflow/" rel="tag">Tensorflow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Transformer/" rel="tag">Transformer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cnn/" rel="tag">cnn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gensim/" rel="tag">gensim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tensorflow/" rel="tag">tensorflow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E6%A1%86%E6%9E%B6/" rel="tag">web框架</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%9A%E5%86%85%E6%96%B0%E9%97%BB/" rel="tag">业内新闻</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E5%88%86%E7%B1%BB/" rel="tag">二分类</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag">云服务器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0/" rel="tag">代码实现</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/" rel="tag">优化方法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%A0%E7%BB%9F%E7%AE%97%E6%B3%95/" rel="tag">传统算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%A8%E6%A1%9F%E6%BA%A2%E5%87%BA/" rel="tag">全桟溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%B3%E7%AD%96%E6%A0%91/" rel="tag">决策树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/" rel="tag">分布式计算</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E9%A6%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">前馈神经网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%AA%E6%9E%9D/" rel="tag">剪枝</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%9A%E5%AE%A2/" rel="tag">博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">卷积神经网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%82%E6%95%B0%E4%BC%98%E5%8C%96/" rel="tag">参数优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF%E5%B7%A5%E7%A8%8B/" rel="tag">后端工程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB/" rel="tag">图像识别</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" rel="tag">基本操作</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E6%A0%87%E7%AD%BE%E5%88%86%E7%B1%BB/" rel="tag">多标签分类</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9E%E6%88%98%E6%8A%80%E5%B7%A7/" rel="tag">实战技巧</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/" rel="tag">容器化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%86%E5%BA%A6%E8%81%9A%E7%B1%BB/" rel="tag">密度聚类</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7%E7%BB%8F%E9%AA%8C/" rel="tag">工具经验</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80/" rel="tag">工程基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E7%BB%8F%E9%AA%8C/" rel="tag">工程经验</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E6%AD%A5/" rel="tag">异步</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%89%8B%E5%86%99%E7%AE%97%E6%B3%95/" rel="tag">手写算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" rel="tag">数据分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">数据可视化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" rel="tag">数据处理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98/" rel="tag">数据挖掘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/" rel="tag">日志管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8/" rel="tag">显卡驱动</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9E%B6%E6%9E%84%E7%BB%9D%E5%AD%A6/" rel="tag">架构绝学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2/" rel="tag">模型部署</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag">深度学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%81%8C%E6%B0%B4/" rel="tag">灌水</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/" rel="tag">特征工程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9/" rel="tag">特征选择</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" rel="tag">环境搭建</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E9%97%AE%E9%A2%98/" rel="tag">环境问题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A9%B7%E9%AC%BC%E7%A7%98%E7%B1%8D/" rel="tag">穷鬼秘籍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/" rel="tag">算法原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0/" rel="tag">算法实现</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E6%80%A7%E8%83%BD/" rel="tag">算法性能</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95%E9%83%A8%E7%BD%B2/" rel="tag">算法部署</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" rel="tag">线性回归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95/" rel="tag">经典算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95/" rel="tag">聚类算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/" rel="tag">自动化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" rel="tag">自然语言处理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%AD%E7%BB%83%E6%8A%80%E5%B7%A7/" rel="tag">训练技巧</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BA%E6%96%87%E5%AE%9E%E7%8E%B0/" rel="tag">论文实现</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87/" rel="tag">评估指标</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%8D%E5%90%91%E9%87%8F%E5%8C%96/" rel="tag">词向量化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6/" rel="tag">谐门武学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B0%90%E9%97%A8%E9%80%9F%E6%94%BB/" rel="tag">谐门速攻</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" rel="tag">踩坑记录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/" rel="tag">迁移学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%80%BB%E8%BE%91%E6%96%AF%E8%92%82%E5%9B%9E%E5%BD%92/" rel="tag">逻辑斯蒂回归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" rel="tag">随机森林</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E6%88%90%E7%AE%97%E6%B3%95/" rel="tag">集成算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="tag">面向对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/" rel="tag">预训练模型</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Albert/" style="font-size: 10px;">Albert</a> <a href="/tags/Attention/" style="font-size: 11.25px;">Attention</a> <a href="/tags/AutoML/" style="font-size: 10px;">AutoML</a> <a href="/tags/BERT/" style="font-size: 10px;">BERT</a> <a href="/tags/BI%E7%AB%99%E7%82%B9/" style="font-size: 11.25px;">BI站点</a> <a href="/tags/BI%E7%BB%9D%E5%AD%A6/" style="font-size: 10px;">BI绝学</a> <a href="/tags/Bert/" style="font-size: 10px;">Bert</a> <a href="/tags/Bokeh/" style="font-size: 10px;">Bokeh</a> <a href="/tags/Colaboratory/" style="font-size: 10px;">Colaboratory</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/ELK/" style="font-size: 10px;">ELK</a> <a href="/tags/Flask/" style="font-size: 10px;">Flask</a> <a href="/tags/GPU/" style="font-size: 10px;">GPU</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Jupyter-Notebook/" style="font-size: 10px;">Jupyter Notebook</a> <a href="/tags/JupyterHub/" style="font-size: 11.25px;">JupyterHub</a> <a href="/tags/Keras/" style="font-size: 12.5px;">Keras</a> <a href="/tags/Kubernetes/" style="font-size: 11.25px;">Kubernetes</a> <a href="/tags/LSTM/" style="font-size: 10px;">LSTM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Metric/" style="font-size: 10px;">Metric</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/NLP/" style="font-size: 15px;">NLP</a> <a href="/tags/Odin/" style="font-size: 11.25px;">Odin</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Pytorch/" style="font-size: 10px;">Pytorch</a> <a href="/tags/R/" style="font-size: 10px;">R</a> <a href="/tags/Ray/" style="font-size: 10px;">Ray</a> <a href="/tags/Roberta/" style="font-size: 10px;">Roberta</a> <a href="/tags/Scikit-learn/" style="font-size: 10px;">Scikit-learn</a> <a href="/tags/Supervisor/" style="font-size: 10px;">Supervisor</a> <a href="/tags/Tensorflow/" style="font-size: 12.5px;">Tensorflow</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/cnn/" style="font-size: 10px;">cnn</a> <a href="/tags/docker/" style="font-size: 12.5px;">docker</a> <a href="/tags/gensim/" style="font-size: 10px;">gensim</a> <a href="/tags/tensorflow/" style="font-size: 10px;">tensorflow</a> <a href="/tags/web%E6%A1%86%E6%9E%B6/" style="font-size: 10px;">web框架</a> <a href="/tags/%E4%B8%9A%E5%86%85%E6%96%B0%E9%97%BB/" style="font-size: 11.25px;">业内新闻</a> <a href="/tags/%E4%BA%8C%E5%88%86%E7%B1%BB/" style="font-size: 10px;">二分类</a> <a href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10px;">云服务器</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0/" style="font-size: 11.25px;">代码实现</a> <a href="/tags/%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/" style="font-size: 10px;">优化方法</a> <a href="/tags/%E4%BC%A0%E7%BB%9F%E7%AE%97%E6%B3%95/" style="font-size: 11.25px;">传统算法</a> <a href="/tags/%E5%85%A8%E6%A1%9F%E6%BA%A2%E5%87%BA/" style="font-size: 10px;">全桟溢出</a> <a href="/tags/%E5%86%B3%E7%AD%96%E6%A0%91/" style="font-size: 11.25px;">决策树</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/" style="font-size: 10px;">分布式计算</a> <a href="/tags/%E5%89%8D%E9%A6%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 10px;">前馈神经网络</a> <a href="/tags/%E5%89%AA%E6%9E%9D/" style="font-size: 10px;">剪枝</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 10px;">博客</a> <a href="/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 11.25px;">卷积神经网络</a> <a href="/tags/%E5%8F%82%E6%95%B0%E4%BC%98%E5%8C%96/" style="font-size: 10px;">参数优化</a> <a href="/tags/%E5%90%8E%E7%AB%AF%E5%B7%A5%E7%A8%8B/" style="font-size: 10px;">后端工程</a> <a href="/tags/%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB/" style="font-size: 11.25px;">图像识别</a> <a href="/tags/%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" style="font-size: 10px;">基本操作</a> <a href="/tags/%E5%A4%9A%E6%A0%87%E7%AD%BE%E5%88%86%E7%B1%BB/" style="font-size: 10px;">多标签分类</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 12.5px;">大数据</a> <a href="/tags/%E5%AE%9E%E6%88%98%E6%8A%80%E5%B7%A7/" style="font-size: 10px;">实战技巧</a> <a href="/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/" style="font-size: 11.25px;">容器化</a> <a href="/tags/%E5%AF%86%E5%BA%A6%E8%81%9A%E7%B1%BB/" style="font-size: 10px;">密度聚类</a> <a href="/tags/%E5%B7%A5%E5%85%B7%E7%BB%8F%E9%AA%8C/" style="font-size: 11.25px;">工具经验</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80/" style="font-size: 12.5px;">工程基础</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E7%BB%8F%E9%AA%8C/" style="font-size: 13.75px;">工程经验</a> <a href="/tags/%E5%BC%82%E6%AD%A5/" style="font-size: 11.25px;">异步</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 12.5px;">性能优化</a> <a href="/tags/%E6%89%8B%E5%86%99%E7%AE%97%E6%B3%95/" style="font-size: 10px;">手写算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" style="font-size: 11.25px;">数据分析</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 11.25px;">数据可视化</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" style="font-size: 12.5px;">数据处理</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 10px;">数据库</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98/" style="font-size: 11.25px;">数据挖掘</a> <a href="/tags/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/" style="font-size: 11.25px;">日志管理</a> <a href="/tags/%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8/" style="font-size: 10px;">显卡驱动</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 20px;">机器学习</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E7%BB%9D%E5%AD%A6/" style="font-size: 11.25px;">架构绝学</a> <a href="/tags/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2/" style="font-size: 10px;">模型部署</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 17.5px;">深度学习</a> <a href="/tags/%E7%81%8C%E6%B0%B4/" style="font-size: 13.75px;">灌水</a> <a href="/tags/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/" style="font-size: 12.5px;">特征工程</a> <a href="/tags/%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9/" style="font-size: 10px;">特征选择</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" style="font-size: 10px;">环境搭建</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E9%97%AE%E9%A2%98/" style="font-size: 10px;">环境问题</a> <a href="/tags/%E7%A9%B7%E9%AC%BC%E7%A7%98%E7%B1%8D/" style="font-size: 10px;">穷鬼秘籍</a> <a href="/tags/%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/" style="font-size: 16.25px;">算法原理</a> <a href="/tags/%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0/" style="font-size: 10px;">算法实现</a> <a href="/tags/%E7%AE%97%E6%B3%95%E6%80%A7%E8%83%BD/" style="font-size: 10px;">算法性能</a> <a href="/tags/%E7%AE%97%E6%B3%95%E9%83%A8%E7%BD%B2/" style="font-size: 11.25px;">算法部署</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" style="font-size: 10px;">线性回归</a> <a href="/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95/" style="font-size: 10px;">经典算法</a> <a href="/tags/%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95/" style="font-size: 10px;">聚类算法</a> <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/" style="font-size: 10px;">自动化</a> <a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" style="font-size: 12.5px;">自然语言处理</a> <a href="/tags/%E8%AE%AD%E7%BB%83%E6%8A%80%E5%B7%A7/" style="font-size: 11.25px;">训练技巧</a> <a href="/tags/%E8%AE%BA%E6%96%87%E5%AE%9E%E7%8E%B0/" style="font-size: 10px;">论文实现</a> <a href="/tags/%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87/" style="font-size: 10px;">评估指标</a> <a href="/tags/%E8%AF%8D%E5%90%91%E9%87%8F%E5%8C%96/" style="font-size: 10px;">词向量化</a> <a href="/tags/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6/" style="font-size: 18.75px;">谐门武学</a> <a href="/tags/%E8%B0%90%E9%97%A8%E9%80%9F%E6%94%BB/" style="font-size: 11.25px;">谐门速攻</a> <a href="/tags/%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" style="font-size: 10px;">踩坑记录</a> <a href="/tags/%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/" style="font-size: 11.25px;">迁移学习</a> <a href="/tags/%E9%80%BB%E8%BE%91%E6%96%AF%E8%92%82%E5%9B%9E%E5%BD%92/" style="font-size: 10px;">逻辑斯蒂回归</a> <a href="/tags/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" style="font-size: 10px;">随机森林</a> <a href="/tags/%E9%9B%86%E6%88%90%E7%AE%97%E6%B3%95/" style="font-size: 10px;">集成算法</a> <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" style="font-size: 10px;">面向对象</a> <a href="/tags/%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/" style="font-size: 12.5px;">预训练模型</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/08/18/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/15/NLP%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E5%88%86%E4%BA%AB/">谐门武学-NLP预训练模型服务分享</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/13/%E9%9B%B6%E6%95%A3%E8%AE%B0%E5%BD%9520200613/">零散记录:20200613</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/25/%E9%9B%B6%E6%95%A3%E8%AE%B0%E5%BD%95:20200425/">零散记录:20200425</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/18/Python%E8%B0%83%E7%94%A8c%E4%BB%A3%E7%A0%81/">Python调用c代码</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 王大炮<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
