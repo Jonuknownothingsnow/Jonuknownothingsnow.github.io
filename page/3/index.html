@@ -145,88 +145,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://jonuknownothingsnow.github.io/2019/07/18/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6%E4%BD%BF%E7%94%A8MKL-DNN%E8%BF%9B%E8%A1%8CCPU%E4%B8%8A%E7%9A%84%E6%A8%A1%E5%9E%8B%E5%8A%A0%E9%80%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="王大炮">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="火力支援">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/07/18/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6%E4%BD%BF%E7%94%A8MKL-DNN%E8%BF%9B%E8%A1%8CCPU%E4%B8%8A%E7%9A%84%E6%A8%A1%E5%9E%8B%E5%8A%A0%E9%80%9F/" class="post-title-link" itemprop="url">谐门武学:使用MKL-DNN进行CPU上的模型加速</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-07-18 00:00:00" itemprop="dateCreated datePublished" datetime="2019-07-18T00:00:00+08:00">2019-07-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-08-18 14:31:54" itemprop="dateModified" datetime="2020-08-18T14:31:54+08:00">2020-08-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%85%A8%E6%A0%88%E6%BA%A2%E5%87%BA%EF%BC%88%E7%AC%91%EF%BC%89/" itemprop="url" rel="index"><span itemprop="name">全栈溢出（笑）</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="谐门武学-使用MKL-DNN进行CPU上的模型加速"><a href="#谐门武学-使用MKL-DNN进行CPU上的模型加速" class="headerlink" title="谐门武学:使用MKL-DNN进行CPU上的模型加速"></a>谐门武学:使用MKL-DNN进行CPU上的模型加速</h1><p>最近因为要上线一些服务，用locust做了下压测，结果不是很乐观。因为这次的服务和模型都不是自己写的，也来不太及仔细看模型改代码了，就想着能不能用点什么非代码层面的方法在给pytorch模型加下速。于是我就找到了英特尔的MKL-DNN这个东西，专门在CPU上对机器学习进行加速。</p>
-<p>虽然说听起来很牛逼，还有人吹提升很大，但是我个人实验下来好像就10%~20%左右的提升，最终还是选择上GPU了。虽然这次最终是没用上，不过作为一个不需要改代码，只要操作下环境就可以带来提升的方案，还是有点好的。这里给大家简单介绍一下怎么用</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/07/18/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6%E4%BD%BF%E7%94%A8MKL-DNN%E8%BF%9B%E8%A1%8CCPU%E4%B8%8A%E7%9A%84%E6%A8%A1%E5%9E%8B%E5%8A%A0%E9%80%9F/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://jonuknownothingsnow.github.io/2019/06/23/%E8%AF%8D%E5%90%91%E9%87%8F%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91%E4%B8%8E%E4%BC%98%E5%8C%96/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -967,6 +885,89 @@
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://jonuknownothingsnow.github.io/2019/01/20/%E5%BE%AA%E7%8E%AF%E5%AD%A6%E4%B9%A0%E7%8E%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="王大炮">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="火力支援">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/01/20/%E5%BE%AA%E7%8E%AF%E5%AD%A6%E4%B9%A0%E7%8E%87/" class="post-title-link" itemprop="url">谐门武学：循环学习率的keras实现</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-01-20 00:00:00" itemprop="dateCreated datePublished" datetime="2019-01-20T00:00:00+08:00">2019-01-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-08-18 14:31:54" itemprop="dateModified" datetime="2020-08-18T14:31:54+08:00">2020-08-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95-%E6%A8%A1%E5%9E%8B/" itemprop="url" rel="index"><span itemprop="name">算法/模型</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="谐门武学：循环学习率的keras实现"><a href="#谐门武学：循环学习率的keras实现" class="headerlink" title="谐门武学：循环学习率的keras实现"></a>谐门武学：循环学习率的keras实现</h1><p>相信我们同学在训练模型时，经常会在训练了一些轮次之后，去改变学习率，来尝试获得更好效果，这并非完全是一种玄学，理论上来说改变学习率确实有可能使得模型突破局部最小值，获得更好的效果。但是这种手动的方式总感觉不靠谱，于是我们想出了一种循环学习率的方法。</p>
+<p>循环学习率（cyclical learning rate）顾名思义就是让学习率不断循环变动的一种技巧。思路与Adam等动态调节学习率的优化器机制有些许类似。试图通过周期性的变动学习率来获得更好的表现。具体详情可以参考提出循环学习率的<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1506.01186">这篇论文</a></p>
+<p>今天我们就来看下循环学习率的keras实现，理解其工作方式。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/01/20/%E5%BE%AA%E7%8E%AF%E5%AD%A6%E4%B9%A0%E7%8E%87/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
@@ -1036,7 +1037,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">63</span>
+          <span class="site-state-item-count">62</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
