@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"jonuknownothingsnow.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Leetcode 阶段回顾 - 动态规划前段时间做了一些leetcode，我想也不能干刷题，是时候稍微总结回顾一下了。今天我们来总结一下动态规划这一类的题目。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Leetcode 阶段回顾 - 动态规划">
+<meta property="og:url" content="https://jonuknownothingsnow.github.io/2020/10/06/Leetcode%20%E9%98%B6%E6%AE%B5%E5%9B%9E%E9%A1%BE%20-%20%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/index.html">
+<meta property="og:site_name" content="火力支援">
+<meta property="og:description" content="Leetcode 阶段回顾 - 动态规划前段时间做了一些leetcode，我想也不能干刷题，是时候稍微总结回顾一下了。今天我们来总结一下动态规划这一类的题目。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-10-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-10-16T02:02:18.265Z">
+<meta property="article:author" content="王大炮">
+<meta property="article:tag" content="传统算法">
+<meta property="article:tag" content="工程基础">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://jonuknownothingsnow.github.io/2020/10/06/Leetcode%20%E9%98%B6%E6%AE%B5%E5%9B%9E%E9%A1%BE%20-%20%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Leetcode 阶段回顾 - 动态规划 | 火力支援</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">火力支援</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://jonuknownothingsnow.github.io/2020/10/06/Leetcode%20%E9%98%B6%E6%AE%B5%E5%9B%9E%E9%A1%BE%20-%20%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="王大炮">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="火力支援">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Leetcode 阶段回顾 - 动态规划
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-10-06 00:00:00" itemprop="dateCreated datePublished" datetime="2020-10-06T00:00:00+08:00">2020-10-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-10-16 10:02:18" itemprop="dateModified" datetime="2020-10-16T10:02:18+08:00">2020-10-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E7%A8%8B%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">工程算法</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Leetcode-阶段回顾-动态规划"><a href="#Leetcode-阶段回顾-动态规划" class="headerlink" title="Leetcode 阶段回顾 - 动态规划"></a>Leetcode 阶段回顾 - 动态规划</h1><p>前段时间做了一些leetcode，我想也不能干刷题，是时候稍微总结回顾一下了。今天我们来总结一下动态规划这一类的题目。</p>
+<a id="more"></a>
+
+<h2 id="动态规划原理"><a href="#动态规划原理" class="headerlink" title="动态规划原理"></a>动态规划原理</h2><p>（这一部分比较枯燥，不想看的同学可以跳过到<a href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%AE%80%E5%8D%95%E4%BE%8B%E9%A2%98">简单例题</a>部分）</p>
+<p>动态规划思想是把递归地把问题拆解为子问题，然后针对子问题解决时做记录，在遇到重复的子问题时直接使用记录的答案而非重新计算，以此提高算法效率。</p>
+<p>想要利用动态规划算法需要具备以下几个条件：</p>
+<ul>
+<li>最优子结构：对所有子结构求出最优解后，就可以确定原问题的最优解。即在原问题最优解情况下，所有子结构都是自身最优解。</li>
+<li>无后效性：子结构确定最优解后，无论这个子结构后续被包含在什么样的更大问题下，它的最优解都保持不变。</li>
+<li>子结构重叠：原问题的求解过程中，产生的子结构有重复的存在，例如原问题P分解为A、B两个问题，而A又可以进一步分解为B、C两个问题，这里B问题就重复出现了。</li>
+</ul>
+<p>利用这三个性质，动态规划实际上通过这样一个流程去解决问题：</p>
+<ul>
+<li>将原问题转换为一个可以递归求解的问题（或者原问题本来就是）</li>
+<li>递归分解子问题直到可被直接解决/可从记录中获取子问题的解</li>
+<li>返回并记录当前子问题的解，直到求出原问题的解</li>
+</ul>
+<h2 id="动态规划简单例题"><a href="#动态规划简单例题" class="headerlink" title="动态规划简单例题"></a>动态规划简单例题</h2><p>这里我们随便举个<a target="_blank" rel="noopener" href="https://leetcode.com/problems/house-robber">House Robber</a>来演示一下</p>
+<p>house robber简单来说是这样，我们有一个非负整数数组，我们可以从中取任意个数，但是不能取数组中相邻的两个数，求我们能够取得的最大和。</p>
+<p>那以动态规划的方式，我们可以这样思考：</p>
+<p>假设f(i)可以求得nums[i:len(nums)]中的最大和，那么问题的解就是f(0)</p>
+<p>而f(0)可以转化成两种情况：</p>
+<ul>
+<li>取第一个数，f(0) = nums[0] + f(2)</li>
+<li>不取第一个数，f(0) = f(1)</li>
+</ul>
+<p>可得f(0) = max(f(1), nums[0] + f(2))，以此递归即可求解，代码如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">rob</span>(<span class="params">self, nums: List[int]</span>) -&gt; int:</span></span><br><span class="line">        n = len(nums)</span><br><span class="line"><span class="meta">        @lru_cache(None)</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">dp</span>(<span class="params">i</span>):</span></span><br><span class="line">            <span class="keyword">if</span> i &gt;= n:</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">return</span> max(dp(i+<span class="number">1</span>), nums[i]+dp(i+<span class="number">2</span>))</span><br><span class="line">        <span class="keyword">return</span> dp(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="动态规划模板"><a href="#动态规划模板" class="headerlink" title="动态规划模板"></a>动态规划模板</h2><p>涉及到动态个规划的问题很多，输入样式往往不同，问题也可能需要巧妙的转化之后才能解，个人感觉并没有特别通用的解题模板，只能说动态规划问题解题的过程中往往会具有以下的格式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 递归模式</span></span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> lru_cache</span><br><span class="line"><span class="comment"># functools包中的lru_cache函数，这个装饰器会为你维护一个哈希表，</span></span><br><span class="line"><span class="comment"># 以当前函数的输入值为键，存储函数结果 </span></span><br><span class="line"><span class="comment"># 当当前函数的输入出现重复时，它直接从表里取结果值而不做运行。</span></span><br><span class="line"><span class="comment"># 情况特殊时你可能需要自己手动创建一个字典来记录子结构结果</span></span><br><span class="line"><span class="meta">@lru_cache </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dp</span>(<span class="params">n</span>):</span></span><br><span class="line">    <span class="comment"># 根据不同情况处理</span></span><br><span class="line">    <span class="keyword">if</span> n &gt; <span class="number">0</span>:</span><br><span class="line">        <span class="comment"># 当问题可以被进一步拆解时</span></span><br><span class="line">        <span class="comment"># 组合子结构的解，有时可能是相加，有时可能是取最大值，视问题而定</span></span><br><span class="line">        <span class="keyword">return</span> dp(n - <span class="number">1</span>) </span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 当问题已经可以直接求解时</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 递推模式</span></span><br><span class="line"><span class="comment"># 递推模式中我们手动创建一个数组或矩阵来记录每个子结构的结果</span></span><br><span class="line"><span class="comment"># 优点在于内存相对占用会比较小，也不会出现递归过深的情况</span></span><br><span class="line"><span class="comment"># 缺点在于需要自己对问题进行进一步的抽象，将递归转化为循环来处理</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dp</span>(<span class="params">n</span>):</span></span><br><span class="line">    <span class="comment"># 创建table作为记录</span></span><br><span class="line">    table = [<span class="number">0</span> <span class="keyword">for</span> x <span class="keyword">in</span> rang(n)]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n):</span><br><span class="line">        <span class="comment"># 建立问题与其子问题之间的递推关系</span></span><br><span class="line">        table[i] = <span class="number">1</span> + table[i<span class="number">-1</span>] </span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> table[<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="动态规划中的零散技巧"><a href="#动态规划中的零散技巧" class="headerlink" title="动态规划中的零散技巧"></a>动态规划中的零散技巧</h2><p>动态规划结合各种类型的题目可以千奇百怪，很少有什么通用的技巧，我最近也没有怎么在刷题，这边随便聊一些还记得的，后面如果有想到再补充吧。</p>
+<h3 id="区间类型题目转化为动态规划"><a href="#区间类型题目转化为动态规划" class="headerlink" title="区间类型题目转化为动态规划"></a>区间类型题目转化为动态规划</h3><p>我们有的时候会遇到“XX条件，求出数组中最大和/最小和/满足xx条件的子数组”类似的题目，由于这个子数组两头都可以随便动，一开始会觉得比较棘手，不知道怎么用动态规划的方法来做。</p>
+<p>一种常用的方法是，不直接求解，而是求“数组中以i位结尾的最大/最小子数组”，这个问题是可以用动态规划方法教简单的解出来来的，解出来之后再对每个i进行检查，就可以获得原问题的答案。</p>
+<p>这种技巧相当于是先把会动的两端中的一端固定住，求解后再查看所有这一端的情况。</p>
+<h3 id="二叉树标记方法"><a href="#二叉树标记方法" class="headerlink" title="二叉树标记方法"></a>二叉树标记方法</h3><p>这个技巧其实也可以算是二叉树问题里的技巧吧。</p>
+<p>我们一般动态规划问题里的输入是一维或者多维的数组，那我们可以用下标i或者(i,j)来表示，这两种都能作为字典的键。但是二叉树里节点/子树的位置怎么表示呢？</p>
+<p>我是这样做的，我用字符串来标记：</p>
+<p>根节点记为”x”, 根节点的左子节点记为”x0”，右子节点记为”x1”,左子节点的左子节点记为”x00”，以此类推。也不算什么技巧啦，就是一个习惯而已。</p>
+<h2 id="靴靴"><a href="#靴靴" class="headerlink" title="靴靴"></a>靴靴</h2><p>今天就先到这里了，靴靴</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>王大炮
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://jonuknownothingsnow.github.io/2020/10/06/Leetcode%20%E9%98%B6%E6%AE%B5%E5%9B%9E%E9%A1%BE%20-%20%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" title="Leetcode 阶段回顾 - 动态规划">https://jonuknownothingsnow.github.io/2020/10/06/Leetcode 阶段回顾 - 动态规划/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BC%A0%E7%BB%9F%E7%AE%97%E6%B3%95/" rel="tag"># 传统算法</a>
+              <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80/" rel="tag"># 工程基础</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/15/NLP%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E5%88%86%E4%BA%AB/" rel="prev" title="谐门武学-NLP预训练模型服务分享">
+      <i class="fa fa-chevron-left"></i> 谐门武学-NLP预训练模型服务分享
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/10/13/Leetcode%20%E9%98%B6%E6%AE%B5%E5%9B%9E%E9%A1%BE%20-%20%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2/" rel="next" title="Leetcode 阶段回顾 - 二分搜索">
+      Leetcode 阶段回顾 - 二分搜索 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Leetcode-%E9%98%B6%E6%AE%B5%E5%9B%9E%E9%A1%BE-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92"><span class="nav-number">1.</span> <span class="nav-text">Leetcode 阶段回顾 - 动态规划</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">动态规划原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%AE%80%E5%8D%95%E4%BE%8B%E9%A2%98"><span class="nav-number">1.2.</span> <span class="nav-text">动态规划简单例题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E6%A8%A1%E6%9D%BF"><span class="nav-number">1.3.</span> <span class="nav-text">动态规划模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E4%B8%AD%E7%9A%84%E9%9B%B6%E6%95%A3%E6%8A%80%E5%B7%A7"><span class="nav-number">1.4.</span> <span class="nav-text">动态规划中的零散技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E9%97%B4%E7%B1%BB%E5%9E%8B%E9%A2%98%E7%9B%AE%E8%BD%AC%E5%8C%96%E4%B8%BA%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92"><span class="nav-number">1.4.1.</span> <span class="nav-text">区间类型题目转化为动态规划</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E6%A0%87%E8%AE%B0%E6%96%B9%E6%B3%95"><span class="nav-number">1.4.2.</span> <span class="nav-text">二叉树标记方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%B4%E9%9D%B4"><span class="nav-number">1.5.</span> <span class="nav-text">靴靴</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">王大炮</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">105</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王大炮</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

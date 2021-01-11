@@ -160,6 +160,171 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://jonuknownothingsnow.github.io/2019/02/10/%E8%B0%90%E9%97%A8%E8%B8%A9%E5%9D%91%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%90%AB%E6%9C%89inf%E5%80%BC%E9%80%A0%E6%88%90%E7%9A%84%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%97%A0%E6%B3%95%E8%AE%AD%E7%BB%83%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="王大炮">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="火力支援">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/02/10/%E8%B0%90%E9%97%A8%E8%B8%A9%E5%9D%91%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%90%AB%E6%9C%89inf%E5%80%BC%E9%80%A0%E6%88%90%E7%9A%84%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%97%A0%E6%B3%95%E8%AE%AD%E7%BB%83%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">谐门踩坑：数据含有inf值造成的神经网络无法训练问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-02-10 00:00:00" itemprop="dateCreated datePublished" datetime="2019-02-10T00:00:00+08:00">2019-02-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-08-18 14:31:54" itemprop="dateModified" datetime="2020-08-18T14:31:54+08:00">2020-08-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95-%E6%A8%A1%E5%9E%8B/" itemprop="url" rel="index"><span itemprop="name">算法/模型</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="谐门踩坑：数据含有inf值造成的神经网络无法训练问题"><a href="#谐门踩坑：数据含有inf值造成的神经网络无法训练问题" class="headerlink" title="谐门踩坑：数据含有inf值造成的神经网络无法训练问题"></a>谐门踩坑：数据含有inf值造成的神经网络无法训练问题</h1><h2 id="踩坑背景"><a href="#踩坑背景" class="headerlink" title="踩坑背景"></a>踩坑背景</h2><p>年前在做一个类似于根据用户行为轨迹评信用分的回归问题。在训练了lgbm、xgb的模型，发现两者达到一个相对良好的性能，并且难以提升后，我准备训练一个NN的模型，用于stacking以提升整体的性能。</p>
+<h2 id="踩坑过程"><a href="#踩坑过程" class="headerlink" title="踩坑过程"></a>踩坑过程</h2><p>我直接读取了在训练lgbm时使用的处理过的特征数据。把它作为一个简单神经网络（大概就是一些全连接层、一个BN，一个dropout，外加一个输出层）的输入。很快我发现虽然网络看上去有在训练，loss在不断降低，但是模型对所有样本的输出都是一样的。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/02/10/%E8%B0%90%E9%97%A8%E8%B8%A9%E5%9D%91%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%90%AB%E6%9C%89inf%E5%80%BC%E9%80%A0%E6%88%90%E7%9A%84%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%97%A0%E6%B3%95%E8%AE%AD%E7%BB%83%E9%97%AE%E9%A2%98/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://jonuknownothingsnow.github.io/2019/01/20/%E5%BE%AA%E7%8E%AF%E5%AD%A6%E4%B9%A0%E7%8E%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="王大炮">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="火力支援">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/01/20/%E5%BE%AA%E7%8E%AF%E5%AD%A6%E4%B9%A0%E7%8E%87/" class="post-title-link" itemprop="url">谐门武学：循环学习率的keras实现</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-01-20 00:00:00" itemprop="dateCreated datePublished" datetime="2019-01-20T00:00:00+08:00">2019-01-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-08-18 14:31:54" itemprop="dateModified" datetime="2020-08-18T14:31:54+08:00">2020-08-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95-%E6%A8%A1%E5%9E%8B/" itemprop="url" rel="index"><span itemprop="name">算法/模型</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="谐门武学：循环学习率的keras实现"><a href="#谐门武学：循环学习率的keras实现" class="headerlink" title="谐门武学：循环学习率的keras实现"></a>谐门武学：循环学习率的keras实现</h1><p>相信我们同学在训练模型时，经常会在训练了一些轮次之后，去改变学习率，来尝试获得更好效果，这并非完全是一种玄学，理论上来说改变学习率确实有可能使得模型突破局部最小值，获得更好的效果。但是这种手动的方式总感觉不靠谱，于是我们想出了一种循环学习率的方法。</p>
+<p>循环学习率（cyclical learning rate）顾名思义就是让学习率不断循环变动的一种技巧。思路与Adam等动态调节学习率的优化器机制有些许类似。试图通过周期性的变动学习率来获得更好的表现。具体详情可以参考提出循环学习率的<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1506.01186">这篇论文</a></p>
+<p>今天我们就来看下循环学习率的keras实现，理解其工作方式。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/01/20/%E5%BE%AA%E7%8E%AF%E5%AD%A6%E4%B9%A0%E7%8E%87/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://jonuknownothingsnow.github.io/2019/01/13/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6%E5%89%8D%E9%A6%88%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84Attention%E6%9C%BA%E5%88%B6%E5%AE%9E%E7%8E%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -825,176 +990,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://jonuknownothingsnow.github.io/2018/09/22/BI%E7%BB%9D%E5%AD%A6%EF%BC%9A%E6%8C%87%E6%A0%87%E5%88%86%E6%9E%90%E7%9A%84%E4%B8%89%E5%A5%97%E8%BD%A6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="王大炮">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="火力支援">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/09/22/BI%E7%BB%9D%E5%AD%A6%EF%BC%9A%E6%8C%87%E6%A0%87%E5%88%86%E6%9E%90%E7%9A%84%E4%B8%89%E5%A5%97%E8%BD%A6/" class="post-title-link" itemprop="url">BI绝学：指标分析的三套车</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-09-22 00:00:00" itemprop="dateCreated datePublished" datetime="2018-09-22T00:00:00+08:00">2018-09-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-08-18 14:31:54" itemprop="dateModified" datetime="2020-08-18T14:31:54+08:00">2020-08-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">数据分析</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="BI绝学：指标分析的三套车"><a href="#BI绝学：指标分析的三套车" class="headerlink" title="BI绝学：指标分析的三套车"></a>BI绝学：指标分析的三套车</h1><blockquote>
-<p>冰雪覆盖着伏尔加河，冰河上跑着三套车。</p>
-<p>有人在唱着忧郁的歌， 唱歌的是那赶车的人。 </p>
-<p>​                        ——《三套车》</p>
-</blockquote>
-<p>最近做BI相关的东西有点多，这两天突然感觉到有点顿悟。来和大家探讨分享一下。我们在平常经遇到的一个问题是，我们有一个很重要的指标，突然有段时间，这个指标跌了很多，或者说出现了异常，我们有没有办法能够快速去定位问题的原因呢，今天我们就来研究这套武功。</p>
-<p>我们这次主要涉及指标分析的三个基本套路：分层、分箱、时序分析，针对指标的分析往往是为了定位到某个现象的原因，分析其问题的根源，我们在做这三个维度的分析时，其实就是通过缩放我们的视角，来找到一个合适的大小，能够恰好观察到问题的本体。如果这个视角太大，问题就和其他部分混在一起，无法分清。如果这个视角太小，我们就会看到成千上万个问题，无法处理。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/09/22/BI%E7%BB%9D%E5%AD%A6%EF%BC%9A%E6%8C%87%E6%A0%87%E5%88%86%E6%9E%90%E7%9A%84%E4%B8%89%E5%A5%97%E8%BD%A6/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://jonuknownothingsnow.github.io/2018/09/15/hyperopt%E8%B0%83%E5%8F%82%E5%B0%8F%E5%AD%90%E7%9A%84%E6%B3%95%E5%AE%9D/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="王大炮">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="火力支援">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/09/15/hyperopt%E8%B0%83%E5%8F%82%E5%B0%8F%E5%AD%90%E7%9A%84%E6%B3%95%E5%AE%9D/" class="post-title-link" itemprop="url">hyperopt:调参小子的法宝</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-09-15 00:00:00" itemprop="dateCreated datePublished" datetime="2018-09-15T00:00:00+08:00">2018-09-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-08-18 14:31:54" itemprop="dateModified" datetime="2020-08-18T14:31:54+08:00">2020-08-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B7%A5%E5%85%B7%E7%BB%8F%E9%AA%8C/" itemprop="url" rel="index"><span itemprop="name">工具经验</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="hyperopt-调参小子的法宝"><a href="#hyperopt-调参小子的法宝" class="headerlink" title="hyperopt:调参小子的法宝"></a>hyperopt:调参小子的法宝</h1><p>还记得我们组长没跑路的时候，有一天他问我，这个sklearn的grid_search太智障了，根本就是一个个试过去，有没有一种充满了高科技的自动调参工具呢？</p>
-<p>当然是有的，当时我就举出了<a target="_blank" rel="noopener" href="https://github.com/hyperopt/hyperopt">hyperopt</a>、Ray的<a target="_blank" rel="noopener" href="http://ray.readthedocs.io/en/latest/tune.html">Ray Tune</a>这两种充满神秘魔法的调参工具（虽然我当时都还没怎么用过）</p>
-<p>现在时过境迁，我们组长跑路了，我也在历战中成长为了一个更有实力的调参小子，就让我来给大家推荐一下hyperopt这款工具。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/09/15/hyperopt%E8%B0%83%E5%8F%82%E5%B0%8F%E5%AD%90%E7%9A%84%E6%B3%95%E5%AE%9D/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1064,12 +1059,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-count">64</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">categories</span>
       </div>
       <div class="site-state-item site-state-tags">
