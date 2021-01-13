@@ -160,6 +160,89 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://jonuknownothingsnow.github.io/2019/08/01/2019-08-01-%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6%E7%AE%80%E6%98%93%E5%BC%82%E6%AD%A5%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="王大炮">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="火力支援">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/08/01/2019-08-01-%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6%E7%AE%80%E6%98%93%E5%BC%82%E6%AD%A5%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">谐门武学:简易异步方法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-08-01 00:00:00" itemprop="dateCreated datePublished" datetime="2019-08-01T00:00:00+08:00">2019-08-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-08-18 14:31:54" itemprop="dateModified" datetime="2020-08-18T14:31:54+08:00">2020-08-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%85%A8%E6%A0%88%E6%BA%A2%E5%87%BA%EF%BC%88%E7%AC%91%EF%BC%89/" itemprop="url" rel="index"><span itemprop="name">全栈溢出（笑）</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="谐门武学-简易异步方法"><a href="#谐门武学-简易异步方法" class="headerlink" title="谐门武学:简易异步方法"></a>谐门武学:简易异步方法</h1><p>之前在优化模型部署的时候整了点异步，今天来随便写下，模型的整体优化还没做完，做完再和大家整理分享一波吧。</p>
+<p>这次的异步主要是因为我们这次有两个不同的服务，A服务需要调B的结果，而B是一个模型服务，有一些耗时，所以我们设计是A通过异步请求B，当B在计算的过程中，A就可以去处理其他的请求，等到B计算结果出来了，A在返回来处理这个结果。</p>
+<p>这次我们使用异步的web框架Sanic，主要是因为sanic相对比较新，比较接近python的asyncio设计。而相比starlette这些框架，又相对更加成熟一些，所以暂时选用Sanic来解决这次的需求。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/08/01/2019-08-01-%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6%E7%AE%80%E6%98%93%E5%BC%82%E6%AD%A5%E6%96%B9%E6%B3%95/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://jonuknownothingsnow.github.io/2019/07/21/Cuda%E4%B8%8EGPU%E5%9E%8B%E5%8F%B7%E4%B8%8E%E9%A9%B1%E5%8A%A8%E7%9A%84%E9%99%90%E5%88%B6%E5%85%B3%E7%B3%BB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -900,88 +983,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://jonuknownothingsnow.github.io/2019/02/17/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6%E8%AF%8D%E5%90%91%E9%87%8F%E5%8C%96%E6%96%B9%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="王大炮">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="火力支援">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/02/17/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6%E8%AF%8D%E5%90%91%E9%87%8F%E5%8C%96%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">谐门武学:词向量化方法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-02-17 00:00:00" itemprop="dateCreated datePublished" datetime="2019-02-17T00:00:00+08:00">2019-02-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-08-18 14:31:54" itemprop="dateModified" datetime="2020-08-18T14:31:54+08:00">2020-08-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95-%E6%A8%A1%E5%9E%8B/" itemprop="url" rel="index"><span itemprop="name">算法/模型</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="谐门武学-词向量化方法"><a href="#谐门武学-词向量化方法" class="headerlink" title="谐门武学:词向量化方法"></a>谐门武学:词向量化方法</h1><p>我们在做机器学习任务的时候，输入的数据都要转化为数值，或者说向量。有的输入天生是数值，比如商品的销量、价格，访问页面的次数等等。有的输入本身是分类，比如商品的颜色是红黄蓝，这种我们可以用one-hot编码变成三个0-1的数值输入。还有的输入是图片，不过图片本质上是一个个像素点组成的，而像素点天生是数值，也就是说图片可以非常方便的转化成一个矩阵来输入。</p>
-<p>所以在所有这些任务里，输入向量化都不是一个困难的问题。但我们在做自然语言的任务时，这就成了一个问题，如何把一句话、一篇文章，转化成数值，同时很好的保留内部的信息呢？我们这个时候需要做的任务就是Doc2Vec，文档向量化。做Doc2Vec的一个主流方法就是基于word2vec，词向量化，我们先把每一个词做成向量，那么一个文档就可以被认为是由词向量组成的序列输入了。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/02/17/%E8%B0%90%E9%97%A8%E6%AD%A6%E5%AD%A6%E8%AF%8D%E5%90%91%E9%87%8F%E5%8C%96%E6%96%B9%E6%B3%95/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1051,16 +1052,16 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-count">65</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">categories</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">105</span>
+        <span class="site-state-item-count">107</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"jonuknownothingsnow.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="谈谈算法模型在服务端的部署弄算法模型在服务端部署方面的东西，最近有点思考，先随便记录一下，以后再做进一步的整理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="谈谈算法模型在服务端的部署">
+<meta property="og:url" content="https://jonuknownothingsnow.github.io/2021/01/04/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="火力支援">
+<meta property="og:description" content="谈谈算法模型在服务端的部署弄算法模型在服务端部署方面的东西，最近有点思考，先随便记录一下，以后再做进一步的整理。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-01-03T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-01-13T02:19:10.215Z">
+<meta property="article:author" content="王大炮">
+<meta property="article:tag" content="推理部署">
+<meta property="article:tag" content="工程实践">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://jonuknownothingsnow.github.io/2021/01/04/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E8%AE%B0%E5%BD%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>谈谈算法模型在服务端的部署 | 火力支援</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">火力支援</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://jonuknownothingsnow.github.io/2021/01/04/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="王大炮">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="火力支援">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          谈谈算法模型在服务端的部署
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-04 00:00:00" itemprop="dateCreated datePublished" datetime="2021-01-04T00:00:00+08:00">2021-01-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-01-13 10:19:10" itemprop="dateModified" datetime="2021-01-13T10:19:10+08:00">2021-01-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E7%A8%8B%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">工程杂谈</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="谈谈算法模型在服务端的部署"><a href="#谈谈算法模型在服务端的部署" class="headerlink" title="谈谈算法模型在服务端的部署"></a>谈谈算法模型在服务端的部署</h1><p>弄算法模型在服务端部署方面的东西，最近有点思考，先随便记录一下，以后再做进一步的整理。</p>
+<a id="more"></a>
+
+<h2 id="关于模型部署框架的两大类型"><a href="#关于模型部署框架的两大类型" class="headerlink" title="关于模型部署框架的两大类型"></a>关于模型部署框架的两大类型</h2><p>算法模型的部署主要可以分成两个方面。一是在移动端/设备端的部署，比较偏嵌入式。另一个是云端/服务端，和其他云端服务的部署比较相似（但也有自己的特点），这里我们主要聊聊后者</p>
+<p>关于模型的云端部署，业界也有许多开源的解决方案，但目前为止来看，还没有一种真的可以一统业界，或者说称得上是绝对主流的方案。</p>
+<p>针对云端部署的框架里，我们可以大致分为两类，一种是主要着力于解决推理性能，提高推理速度的框架，这一类里有诸如tensorflow的tensorflow serving、NVIDIA基于他们tensorRt的Triton(原TensorRt Serving)，onnx-runtime等，这一类框架基本都是基于C++， 将模型转化为某一特定形式（转化的过程中可能伴有一些优化的操作）， 再以C++载入，并对外提供服务，以此来获得相对较高的性能。</p>
+<p>另一类框架主要着眼于结合模型整个生命周期，对模型部署进行管理，比如mlflow、seldon、bentoml、cortex等等，这些框架的设计与思路其实五花八门，有的为了和训练部分接轨，把模型文件管理也纳入了。有的则是只管到容器编排的部分，用户需要自己做好容器，它帮你发到k8s上之类的（这种情况甚至能和第一类框架连起来用）。当然也有专注于模型推理这一小块的。</p>
+<h2 id="关于两种类型的成因思考"><a href="#关于两种类型的成因思考" class="headerlink" title="关于两种类型的成因思考"></a>关于两种类型的成因思考</h2><p>我个人觉得之所以业界会出现这两类设计思路完全不同，但都自称是“模型推理服务框架”的工具，主要原因是因为我们在模型推理服务这个问题上，主要有两个不同的需求/问题：</p>
+<ul>
+<li><p>从模型训练到模型服务部署过程中的工作量问题。</p>
+</li>
+<li><p>模型推理服务的性能问题</p>
+</li>
+</ul>
+<p>这两个问题有时候会互相牵制，假设我们要优化模型训练到服务部署的过程，最简便的方式无疑是仍旧使用python加载模型，和算法同学在训练部分写的代码保持一致，但python作为http或者grpc服务的性能就需要想办法解决。</p>
+<p>而如果全部转成用c++提供服务，对训练好的模型进行转化，使其能被c++服务的使用又成为额外的一步。tensorflow serving就是这里有优势，只要是tf的模型，它都可以直接使用。但对于大量的pytorch使用者来说，这里并没有如tensorflow serving 一样简易的解决方案。</p>
+<h2 id="那么请问……"><a href="#那么请问……" class="headerlink" title="那么请问……"></a>那么请问……</h2><p>那么请问有没有一种既能够照顾到使用的简易性，又能够获得很好服务性能的框架呢！？</p>
+<p>……很抱歉，目前看来是真的还没有，不过我个人经过这段时间的思考，我想出来的解决方案是这样的。就是通过区分不同的场景，分别处理模型的服务端部署。</p>
+<p>对性能要求不高的模型，我们可以直接使用python框架部署，便于模型训练与部署之间的对接（当然性能优化也要做，这块的性能优化做的好了，能够减轻很多工作量，bentoml等框架也是有对模型的python部署做优化的）。而对性能要求高的，我们再进入模型转化的流程。</p>
+<h2 id="关于我们目前的解决方案"><a href="#关于我们目前的解决方案" class="headerlink" title="关于我们目前的解决方案"></a>关于我们目前的解决方案</h2><p>目前我的解决方案也比较类似，我们是基于k8s进行容器化的模型部署的。对于直接使用python部署的模型来说，我们通过集群训练之后，注册保存模型文件，需要部署时直接通过k8s将模型文件挂载到推理服务的容器中，进行加载。</p>
+<p>对于另一类需要额外转换操作的模型，我们则是提供了转换任务，将已有的模型挂载到转换任务中，执行转化操作，再将结果保存为新模型，然后用于其他方式的部署（主要是移动端的部署）</p>
+<p>目前整个系统里我们主要做的是基于集群的训练任务（这块跟模型部署关系不大，不过我们本来就打算做），模型管理服务，以及可自定义的模型Http服务。</p>
+<h2 id="为啥不上Kubeflow"><a href="#为啥不上Kubeflow" class="headerlink" title="为啥不上Kubeflow"></a>为啥不上Kubeflow</h2><p>有的同学可能会问，你整这么一整套下来，为啥不直接用kubeflow呢？问的好，一个原因是我开始整这玩意的时候kubeflow还没到1.0,我当时尝试过用它，但简直就是地狱，根本搞不到文档，还要去找他们藏在不知道哪个讨论组里的开发规划来看才知道到底他们在想什么。</p>
+<p>当然更重要的一个原因是kubeflow我用下来觉得实在太重型，它一下子囊括太多东西了，而且还不好拆分。假设你对istio等部分有自己的想法，或者有定制化的需求的话，其实会弄得很麻烦很痛苦。</p>
+<p>而我开发现在这套东西的时候一个想法就是，可以把它们凑在一起用，这样能获得最好的联动效果，熟悉之后会非常便利，但是假如有的部分不需要，或者自己有其他的替代品，也可以完全拆分开来使用。就算没有训练、没有模型管理，依然可以上传文件直接部署，或者提交一个镜像来部署。做到尽可能低的依赖。</p>
+<p>其实我理想里是甚至可以不需要k8s都可以跑，但是从开发时间上考虑还是优先解决k8s的版本。</p>
+<h2 id="靴靴"><a href="#靴靴" class="headerlink" title="靴靴"></a>靴靴</h2><p>今天就先到这里，靴靴</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>王大炮
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://jonuknownothingsnow.github.io/2021/01/04/%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E8%AE%B0%E5%BD%95/" title="谈谈算法模型在服务端的部署">https://jonuknownothingsnow.github.io/2021/01/04/模型部署记录/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%8E%A8%E7%90%86%E9%83%A8%E7%BD%B2/" rel="tag"># 推理部署</a>
+              <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" rel="tag"># 工程实践</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/13/Leetcode%20%E9%98%B6%E6%AE%B5%E5%9B%9E%E9%A1%BE%20-%20%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2/" rel="prev" title="Leetcode 阶段回顾 - 二分搜索">
+      <i class="fa fa-chevron-left"></i> Leetcode 阶段回顾 - 二分搜索
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B0%88%E8%B0%88%E7%AE%97%E6%B3%95%E6%A8%A1%E5%9E%8B%E5%9C%A8%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%9A%84%E9%83%A8%E7%BD%B2"><span class="nav-number">1.</span> <span class="nav-text">谈谈算法模型在服务端的部署</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E6%A1%86%E6%9E%B6%E7%9A%84%E4%B8%A4%E5%A4%A7%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text">关于模型部署框架的两大类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E4%B8%A4%E7%A7%8D%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%88%90%E5%9B%A0%E6%80%9D%E8%80%83"><span class="nav-number">1.2.</span> <span class="nav-text">关于两种类型的成因思考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%82%A3%E4%B9%88%E8%AF%B7%E9%97%AE%E2%80%A6%E2%80%A6"><span class="nav-number">1.3.</span> <span class="nav-text">那么请问……</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E6%88%91%E4%BB%AC%E7%9B%AE%E5%89%8D%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">1.4.</span> <span class="nav-text">关于我们目前的解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E5%95%A5%E4%B8%8D%E4%B8%8AKubeflow"><span class="nav-number">1.5.</span> <span class="nav-text">为啥不上Kubeflow</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%B4%E9%9D%B4"><span class="nav-number">1.6.</span> <span class="nav-text">靴靴</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">王大炮</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">65</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">107</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王大炮</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
